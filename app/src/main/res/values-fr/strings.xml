@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Mes Capsules de Café</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="capsulesQty">%1$d capsules en stock</string>
+    <string name="capsulesTitle">Capsules de %1$s</string>
+
+    <string name="intenso">Intenso</string>
+    <string name="espresso">Espresso</string>
+    <string name="lungo">Lungo</string>
+    <string name="decaffeinato">Decaffeinato</string>
+    <string name="pureOrigin">Pure Origine</string>
+    <string name="variations">Variations</string>
+    <string name="variations_limited">Variations Editions limitées</string>
+    <string name="rate_app">Noter cette application</string>
+    <string name="share">Partager</string>
+    <string name="share_fb">Partager sur Facebook</string>
+
+
+</resources>

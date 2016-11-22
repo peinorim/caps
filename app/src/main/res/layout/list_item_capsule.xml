@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:padding="5sp">
+
+
+    <ImageView
+        android:id="@+id/capsuleimg"
+        android:layout_width="70sp"
+        android:layout_height="70sp"/>
+
+    <RelativeLayout
+        android:paddingLeft="20sp"
+        android:layout_toRightOf="@+id/capsuleimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/capsulename"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Capsule Name"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text_size"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/capsuleqty"
+            android:layout_below="@+id/capsulename"
+            android:layout_width="match_parent"
+            android:layout_height="50sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/subheading_text_size"/>
+
+       <!-- <Button
+            android:id="@+id/minus"
+            android:layout_width="70sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/capsulename"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/ic_remove_white_24dp"
+            android:focusable="false"
+            android:background="@drawable/btn_minus"
+            android:drawableLeft="@drawable/ic_remove_white_24dp" />
+
+        <EditText
+            android:id="@+id/qty"
+            android:minWidth="80sp"
+            android:maxWidth="100sp"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:layout_below="@+id/capsulename"
+            android:layout_toRightOf="@+id/minus"
+            android:gravity="center"
+            android:inputType="number"
+            android:background="@color/brown_darken2"
+            android:textColor="@color/white"
+            android:text="123456" />
+
+        <Button
+            android:id="@+id/plus"
+            android:layout_width="70sp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/capsulename"
+            android:layout_toRightOf="@+id/qty"
+            android:layout_gravity="center"
+            android:drawableStart="@drawable/ic_add_white_24dp"
+            android:background="@drawable/btn_plus"
+            android:focusable="false"
+            android:drawableLeft="@drawable/ic_add_white_24dp" />-->
+    </RelativeLayout>
+
+</RelativeLayout>
