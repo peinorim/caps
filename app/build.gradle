@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
     defaultConfig {
-        applicationId "com.paocorp.mycapsules"
+        applicationId "com.paocorp.mycoffeecapsules"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
@@ -23,6 +23,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.google.android.gms:play-services-ads:10.0.0'
+    compile 'com.google.android.gms:play-services-ads:10.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.17.0'
 }

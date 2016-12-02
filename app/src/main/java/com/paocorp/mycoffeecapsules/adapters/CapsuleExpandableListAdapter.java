@@ -36,8 +36,11 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Capsule getChild(int groupPosition, int childPosititon) {
-        return this.listDataChild.get(this.listDataHeader.get(groupPosition))
-                .get(childPosititon);
+        if (this.listDataHeader.get(groupPosition) != null && this.listDataChild.get(this.listDataHeader.get(groupPosition)) != null) {
+            return this.listDataChild.get(this.listDataHeader.get(groupPosition)).get(childPosititon);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -49,27 +52,30 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String capName = getChild(groupPosition, childPosition).getName();
-        final String capImg = getChild(groupPosition, childPosition).getImg();
-        final int capQty = getChild(groupPosition, childPosition).getQty();
+        Capsule currentcapsule = getChild(groupPosition, childPosition);
+        if (currentcapsule != null) {
+            final String capName = currentcapsule.getName();
+            final String capImg = currentcapsule.getImg();
+            final int capQty = currentcapsule.getQty();
 
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item_capsule, null);
-        }
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) this.context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.list_item_capsule, null);
+            }
 
-        TextView tvName = (TextView) convertView.findViewById(R.id.capsulename);
-        tvName.setText(capName);
+            TextView tvName = (TextView) convertView.findViewById(R.id.capsulename);
+            tvName.setText(capName);
 
-        TextView tvQty = (TextView) convertView.findViewById(R.id.capsuleqty);
-        tvQty.setText(context.getResources().getString(R.string.capsulesQty, capQty));
+            TextView tvQty = (TextView) convertView.findViewById(R.id.capsuleqty);
+            tvQty.setText(context.getResources().getString(R.string.capsulesQty, capQty));
 
-        ImageView capsule_img = (ImageView) convertView.findViewById(R.id.capsuleimg);
-        int res = context.getResources().getIdentifier(capImg, "drawable", context.getPackageName());
-        if(res != 0) {
-            Drawable drawable = context.getResources().getDrawable(res);
-            capsule_img.setImageDrawable(drawable);
+            ImageView capsule_img = (ImageView) convertView.findViewById(R.id.capsuleimg);
+            int res = context.getResources().getIdentifier(capImg, "drawable", context.getPackageName());
+            if (res != 0) {
+                Drawable drawable = context.getResources().getDrawable(res);
+                capsule_img.setImageDrawable(drawable);
+            }
         }
 
         return convertView;

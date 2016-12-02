@@ -16,6 +16,9 @@
     <string name="rate_app">Rate this app</string>
     <string name="share">Share</string>
     <string name="share_fb">Share on Facebook</string>
+    <string name="fb_ContentDesc">I use this app to inventory my stock of coffee capsules.</string>
+    <string name="search">Search a capsule</string>
+    <string name="no_results">No results matching this request</string>
 
 
 </resources>

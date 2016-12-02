@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.paocorp.mycoffeecapsules.models.Capsule;
+import com.paocorp.mycoffeecapsules.models.CapsuleType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CapsuleHelper extends DatabaseHelper {
 
@@ -78,6 +80,31 @@ public class CapsuleHelper extends DatabaseHelper {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public ArrayList<Capsule> getSearchCapsules(CapsuleType type, String query) {
+        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase() + "%'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        ArrayList<Capsule> allCapsules = new ArrayList<Capsule>();
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Capsule capsule = new Capsule();
+                capsule.setId(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_ID)));
+                capsule.setName(c.getString(c.getColumnIndex(COLUMN_CAPSULE_NAME)));
+                capsule.setQty(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_QTY)));
+                capsule.setImg(c.getString(c.getColumnIndex(COLUMN_CAPSULE_IMG)));
+                capsule.setConso(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_CONSO)));
+                capsule.setNotif(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_NOTIF)));
+                capsule.setType(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_TYPE)));
+                allCapsules.add(capsule);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return allCapsules;
     }
 
 

@@ -1,5 +1,7 @@
 package com.paocorp.mycoffeecapsules;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -12,11 +14,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -31,7 +35,9 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.paocorp.mycoffeecapsules.adapters.CapsuleExpandableListAdapter;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
+import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
+import com.paocorp.mycoffeecapsules.models.CapsuleType;
 import com.paocorp.mycoffeecapsules.models.ShowAdsApplication;
 
 
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     protected InterstitialAd mInterstitialAd = new InterstitialAd(this);
     ArrayList<String> types;
     ExpandableListView expListView;
+    ExpandableListView expListViewSearch;
     NumberPicker nb;
     CapsuleHelper capsuleHelper;
     View currentView;
@@ -198,6 +205,55 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String query) {
+                if (query.length() >= 3) {
+                    findViewById(R.id.first_list).setVisibility(View.GONE);
+                    findViewById(R.id.capsules_search_container).setVisibility(View.VISIBLE);
+
+                    HashMap<String, ArrayList<Capsule>> listDataCapsulesSearch = new HashMap<String, ArrayList<Capsule>>();
+                    expListViewSearch = (ExpandableListView) findViewById(R.id.search_list);
+
+
+                    ArrayList<String> types = new ArrayList<String>();
+                    CapsuleTypeHelper capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
+
+                    for (CapsuleType type : capsuleTypeHelper.getAllCapsuleTypes()) {
+                        ArrayList<Capsule> listDataSearch = capsuleHelper.getSearchCapsules(type, query);
+                        if (listDataSearch.size() > 0) {
+                            listDataCapsulesSearch.put(type.getName(), listDataSearch);
+                            types.add(type.getName());
+                        }
+                    }
+                    if (listDataCapsulesSearch.size() > 0) {
+                        CapsuleExpandableListAdapter searchListAdapter = new CapsuleExpandableListAdapter(getApplicationContext(), types, listDataCapsulesSearch);
+                        expListViewSearch.setAdapter(searchListAdapter);
+                        findViewById(R.id.noResults).setVisibility(View.GONE);
+                        findViewById(R.id.search_list).setVisibility(View.VISIBLE);
+                    } else {
+                        expListViewSearch.setAdapter((BaseExpandableListAdapter) null);
+                        findViewById(R.id.noResults).setVisibility(View.VISIBLE);
+                        findViewById(R.id.search_list).setVisibility(View.GONE);
+                    }
+
+                } else {
+                    findViewById(R.id.first_list).setVisibility(View.VISIBLE);
+                    findViewById(R.id.capsules_search_container).setVisibility(View.GONE);
+                }
+                return true;
+            }
+        });
         return true;
     }
 
@@ -209,7 +265,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
@@ -223,7 +279,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent = new Intent(this, MainActivity.class);
 
-         if (id == R.id.nav_share) {
+        if (id == R.id.nav_share) {
             if (ShareDialog.canShow(ShareLinkContent.class)) {
                 String fbText = getResources().getString(R.string.fb_ContentDesc);
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()

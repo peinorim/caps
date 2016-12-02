@@ -81,7 +81,6 @@ public class SplashActivity extends AppCompatActivity implements NavigationView.
                 listDataCapsules.put(type.getName(), capsulesByType);
             }
 
-
             return null;
         }
 

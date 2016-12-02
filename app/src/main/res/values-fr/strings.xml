@@ -16,6 +16,9 @@
     <string name="rate_app">Noter cette application</string>
     <string name="share">Partager</string>
     <string name="share_fb">Partager sur Facebook</string>
+    <string name="fb_ContentDesc">J\'utilise cette application pour inventorier mes capsules de café.</string>
+    <string name="search">Rechercher une capsule</string>
+    <string name="no_results">Pas de résultat correspondant à cette recherche</string>
 
 
 </resources>
