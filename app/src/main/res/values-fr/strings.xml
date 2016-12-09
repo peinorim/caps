@@ -4,7 +4,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules en stock</string>
-    <string name="capsulesTitle">Capsules de %1$s</string>
+    <string name="capsulesTitle">Capsules de %1$s en stock</string>
 
     <string name="intenso">Intenso</string>
     <string name="espresso">Espresso</string>
@@ -19,6 +19,9 @@
     <string name="fb_ContentDesc">J\'utilise cette application pour inventorier mes capsules de café.</string>
     <string name="search">Rechercher une capsule</string>
     <string name="no_results">Pas de résultat correspondant à cette recherche</string>
+    <string name="daily_conso">Consommation quotidienne de %1$s</string>
+    <string name="consoPreview">Vous serez à court de stock de %1$s vers le %2$s</string>
+    <string name="consoOut">Vous serez à court de %1$s d\'ici demain</string>
 
 
 </resources>

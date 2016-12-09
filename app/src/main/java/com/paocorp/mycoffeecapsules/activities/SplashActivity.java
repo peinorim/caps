@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules;
+package com.paocorp.mycoffeecapsules.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
 import com.paocorp.mycoffeecapsules.db.DatabaseHelper;

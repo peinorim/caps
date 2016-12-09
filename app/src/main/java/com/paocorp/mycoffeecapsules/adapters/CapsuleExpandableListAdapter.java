@@ -1,20 +1,32 @@
 package com.paocorp.mycoffeecapsules.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.paocorp.mycoffeecapsules.R;
+import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,6 +76,8 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 convertView = infalInflater.inflate(R.layout.list_item_capsule, null);
             }
 
+            final View ultiView = convertView;
+
             TextView tvName = (TextView) convertView.findViewById(R.id.capsulename);
             tvName.setText(capName);
 
@@ -76,9 +90,102 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 Drawable drawable = context.getResources().getDrawable(res);
                 capsule_img.setImageDrawable(drawable);
             }
+
+            ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
+            btnConso.setTag(currentcapsule.getId());
+            btnConso.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final int capId = (Integer) v.getTag();
+                    consoDialog(ultiView, capId);
+                }
+            });
+
+            majAlertConso(convertView, currentcapsule);
+
         }
 
         return convertView;
+    }
+
+    private void consoDialog(final View convertView, int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View v = inflater.inflate(R.layout.conso_dialog, null);
+        builder.setCancelable(true);
+        final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
+        final Capsule capsule = capsuleHelper.getCapsuleById(id);
+
+        if (capsule != null) {
+            TextView dialogTitle = (TextView) v.findViewById(R.id.consoTitle);
+            dialogTitle.setText(context.getResources().getString(R.string.daily_conso, capsule.getName()));
+            final NumberPicker nb = (NumberPicker) v.findViewById(R.id.consoQty);
+            nb.getWrapSelectorWheel();
+            nb.setMinValue(0);
+            nb.setMaxValue(10000);
+            nb.setValue(capsule.getConso());
+
+            if (capsule.getQty() > 0 && capsule.getConso() > 0) {
+                TextView consoPreview = (TextView) v.findViewById(R.id.consoPreview);
+                long days = Math.round(Math.floor(capsule.getQty() / capsule.getConso()));
+
+                if (days > 0) {
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.DATE, (int) days);
+                    String consoDatePreview = DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
+                    consoPreview.setText(context.getResources().getString(R.string.consoPreview, capsule.getName(), consoDatePreview));
+                } else {
+                    consoPreview.setText(context.getResources().getString(R.string.consoOut, capsule.getName()));
+                }
+            }
+
+            builder.setView(v)
+                    .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int conso = nb.getValue();
+                            capsule.setConso(conso);
+                            capsuleHelper.updateCapsule(capsule);
+                            majAlertConso(convertView, capsule);
+                        }
+                    })
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+            AdView adView = (AdView) v.findViewById(R.id.banner_bottom);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+    }
+
+    private void majAlertConso(View convertView, Capsule currentcapsule) {
+
+        ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
+        if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
+            long days = Math.round(Math.floor(currentcapsule.getQty() / currentcapsule.getConso()));
+            if (days <= 5) {
+                changeBtnColor(btnConso, R.color.red_darken3);
+            } else {
+                changeBtnColor(btnConso, R.color.black);
+            }
+        } else {
+            changeBtnColor(btnConso, R.color.black);
+        }
+    }
+
+    private void changeBtnColor(View btnConso, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnConso.getBackground().setColorFilter(context.getResources().getColor(color), PorterDuff.Mode.SRC_IN);
+        } else {
+            Drawable wrapDrawable = DrawableCompat.wrap(btnConso.getBackground());
+            DrawableCompat.setTint(wrapDrawable, context.getResources().getColor(color));
+            btnConso.setBackgroundDrawable(DrawableCompat.unwrap(wrapDrawable));
+        }
     }
 
     @Override

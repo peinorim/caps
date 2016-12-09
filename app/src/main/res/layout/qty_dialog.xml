@@ -15,10 +15,10 @@
             android:id="@+id/dialogTitle"
             android:layout_width="match_parent"
             android:layout_height="64sp"
-            android:background="@color/teal_darken2"
+            android:background="@color/yellow_darken4"
             android:gravity="center_horizontal|center_vertical"
             android:scaleType="center"
-            android:text="Number of Capsules"
+            android:text="@string/capsulesTitle"
             android:textColor="@color/white"
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />

@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules;
+package com.paocorp.mycoffeecapsules.activities;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -33,6 +33,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.adapters.CapsuleExpandableListAdapter;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
@@ -129,16 +130,16 @@ public class MainActivity extends AppCompatActivity
                                         int groupPosition, int childPosition, long id) {
                 currentView = v;
                 Capsule currentCapsule = listAdapter.getChild(groupPosition, childPosition);
-                createResolveDialog(currentCapsule);
+                createQtyDialog(currentCapsule);
                 return false;
             }
         });
     }
 
-    public void createResolveDialog(final Capsule currentCapsule) {
+    public void createQtyDialog(final Capsule currentCapsule) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
-        final View v = inflater.inflate(R.layout.resolve_dialog, null);
+        final View v = inflater.inflate(R.layout.qty_dialog, null);
         builder.setCancelable(true);
 
         nb = (NumberPicker) v.findViewById(R.id.qty);

@@ -28,7 +28,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name="com.paocorp.mycoffeecapsules.SplashActivity"
+            android:name="com.paocorp.mycoffeecapsules.activities.SplashActivity"
             android:theme="@style/Theme.Transparent"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize|adjustPan">
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.paocorp.mycoffeecapsules.MainActivity"
+            android:name="com.paocorp.mycoffeecapsules.activities.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustResize|adjustPan"
