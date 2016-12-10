@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,11 +34,12 @@ public class SplashActivity extends AppCompatActivity implements NavigationView.
 
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
-        /**
-         * Showing splashscreen while making network calls to download necessary
-         * data before launching the app Will use AsyncTask to make http call
-         */
-        new PrefetchData().execute();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new PrefetchData().execute();
+            }
+        }, 3000);
 
     }
 

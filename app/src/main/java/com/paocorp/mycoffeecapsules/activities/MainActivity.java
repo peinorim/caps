@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -44,6 +45,7 @@ import com.paocorp.mycoffeecapsules.models.ShowAdsApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity
     ShareDialog shareDialog;
     CallbackManager callbackManager;
     AdView adView;
+    CapsuleTypeHelper capsuleTypeHelper;
+    ArrayList<CapsuleType> listCapsuleType;
+    boolean modif = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,8 +134,10 @@ public class MainActivity extends AppCompatActivity
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
                 currentView = v;
-                Capsule currentCapsule = listAdapter.getChild(groupPosition, childPosition);
-                createQtyDialog(currentCapsule);
+                int capId = listAdapter.getChild(groupPosition, childPosition).getId();
+                if (capId != 0) {
+                    createQtyDialog(capsuleHelper.getCapsuleById(capId));
+                }
                 return false;
             }
         });
@@ -145,6 +152,7 @@ public class MainActivity extends AppCompatActivity
         nb = (NumberPicker) v.findViewById(R.id.qty);
         TextView dialogTitle = (TextView) v.findViewById(R.id.dialogTitle);
         dialogTitle.setText(getResources().getString(R.string.capsulesTitle, currentCapsule.getName()));
+        modif = false;
 
         builder.setView(v)
                 .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
@@ -155,6 +163,7 @@ public class MainActivity extends AppCompatActivity
 
                         Capsule cap = capsuleHelper.getCapsuleById(capsuleId);
                         if (cap != null) {
+                            modif = true;
                             cap.setQty(qty);
                             capsuleHelper.updateCapsule(cap);
                             TextView majQty = (TextView) currentView.findViewById(R.id.capsuleqty);
@@ -228,7 +237,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     ArrayList<String> types = new ArrayList<String>();
-                    CapsuleTypeHelper capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
+                    capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
 
                     for (CapsuleType type : capsuleTypeHelper.getAllCapsuleTypes()) {
                         ArrayList<Capsule> listDataSearch = capsuleHelper.getSearchCapsules(type, query);
@@ -238,8 +247,19 @@ public class MainActivity extends AppCompatActivity
                         }
                     }
                     if (listDataCapsulesSearch.size() > 0) {
-                        CapsuleExpandableListAdapter searchListAdapter = new CapsuleExpandableListAdapter(getApplicationContext(), types, listDataCapsulesSearch);
+                        final CapsuleExpandableListAdapter searchListAdapter = new CapsuleExpandableListAdapter(MainActivity.this, types, listDataCapsulesSearch);
                         expListViewSearch.setAdapter(searchListAdapter);
+                        expListViewSearch.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+                            @Override
+                            public boolean onChildClick(ExpandableListView parent, View v,
+                                                        int groupPosition, int childPosition, long id) {
+                                currentView = v;
+                                Capsule currentCapsule = searchListAdapter.getChild(groupPosition, childPosition);
+                                createQtyDialog(currentCapsule);
+                                return false;
+                            }
+                        });
                         findViewById(R.id.noResults).setVisibility(View.GONE);
                         findViewById(R.id.search_list).setVisibility(View.VISIBLE);
                     } else {
@@ -249,6 +269,21 @@ public class MainActivity extends AppCompatActivity
                     }
 
                 } else {
+                    if (modif) {
+                        capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
+                        listCapsuleType = capsuleTypeHelper.getAllCapsuleTypes();
+                        listDataCapsules = new HashMap<String, ArrayList<Capsule>>();
+
+                        for (CapsuleType type : listCapsuleType) {
+                            types.add(type.getName());
+                            ArrayList<Capsule> capsulesByType = capsuleHelper.getAllCapsulesByType(type.getId());
+                            listDataCapsules.put(type.getName(), capsulesByType);
+                        }
+                        listAdapter = new CapsuleExpandableListAdapter(getApplicationContext(), types, listDataCapsules);
+                        expListView.setAdapter(listAdapter);
+                        onExpandableClickListener();
+                    }
+
                     findViewById(R.id.first_list).setVisibility(View.VISIBLE);
                     findViewById(R.id.capsules_search_container).setVisibility(View.GONE);
                 }
@@ -294,6 +329,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_rate) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url)));
+        } else if (id == R.id.nav_order) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.order_url)));
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

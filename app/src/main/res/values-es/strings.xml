@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mi café Cápsulas</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_confirm">Confirmar</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="capsulesQty">%1$d cápsulas stock</string>
+    <string name="capsulesTitle">Cápsulas de %1$s en stock</string>
+    <string name="consoOut">Se le acaba el %1$s por la mañana</string>
+    <string name="consoPreview">Va a ser corto de %1$s o alrededor del %2$s</string>
+    <string name="daily_conso">El consumo diario de %1$s</string>
+    <string name="decaffeinato">Decaffeinato</string>
+    <string name="espresso">Espresso</string>
+    <string name="fb_ContentDesc">Yo uso esta aplicación para el inventario mis cápsulas de café.</string>
+    <string name="intenso">Intenso</string>
+    <string name="lungo">Lungo</string>
+    <string name="no_results">No hay resultados para esta búsqueda</string>
+    <string name="order">Ordenar cápsulas de Nespresso</string>
+    <string name="order_url">https://www.nespresso.com/mobile/es/es/catalog</string>
+    <string name="pureOrigin">Pure Origin</string>
+    <string name="rate_app">Calificar este programa</string>
+    <string name="search">Buscar cápsula</string>
+    <string name="share">Compartir</string>
+    <string name="share_fb">Compartir en Facebook</string>
+    <string name="variations">Variations</string>
+    <string name="variations_limited">Variations Limited Edition</string>
+</resources>

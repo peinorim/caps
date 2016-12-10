@@ -4,7 +4,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules in stock</string>
-    <string name="capsulesTitle">%1$s Capsules  in stock</string>
+    <string name="capsulesTitle">%1$s Capsules in stock</string>
 
     <string name="intenso">Intenso</string>
     <string name="espresso">Espresso</string>
@@ -19,9 +19,11 @@
     <string name="fb_ContentDesc">I use this app to inventory my stock of coffee capsules.</string>
     <string name="search">Search a capsule</string>
     <string name="no_results">No results matching this request</string>
+    <string name="order_url">https://www.nespresso.com/mobile/uk/en/catalog</string>
+    <string name="order">Order Nespresso Capsules</string>
     <string name="daily_conso">Daily consumption of %1$s</string>
-    <string name="consoPreview">You will run out of stock of %1$s around %2$s</string>
-    <string name="consoOut">You will be whort of %1$s tomorrow</string>
+    <string name="consoPreview">You will run out of %1$s around %2$s</string>
+    <string name="consoOut">You will be short of %1$s tomorrow</string>
 
 
 </resources>

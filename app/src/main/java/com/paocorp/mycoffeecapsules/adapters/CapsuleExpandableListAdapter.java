@@ -38,6 +38,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, ArrayList<Capsule>> listDataChild;
     private HashMap<Integer, Integer> listMinus = new HashMap<>();
     private HashMap<Integer, Integer> listPlus = new HashMap<>();
+    View baseView;
 
     public CapsuleExpandableListAdapter(Context context, List<String> listDataHeader,
                                         HashMap<String, ArrayList<Capsule>> listChildData) {
@@ -76,7 +77,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 convertView = infalInflater.inflate(R.layout.list_item_capsule, null);
             }
 
-            final View ultiView = convertView;
+            baseView = convertView;
 
             TextView tvName = (TextView) convertView.findViewById(R.id.capsulename);
             tvName.setText(capName);
@@ -98,7 +99,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     final int capId = (Integer) v.getTag();
-                    consoDialog(ultiView, capId);
+                    consoDialog(baseView, capId);
                 }
             });
 
@@ -163,7 +164,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private void majAlertConso(View convertView, Capsule currentcapsule) {
+    public void majAlertConso(View convertView, Capsule currentcapsule) {
 
         ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
         if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
