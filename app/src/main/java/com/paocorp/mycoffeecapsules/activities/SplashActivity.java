@@ -79,9 +79,11 @@ public class SplashActivity extends AppCompatActivity implements NavigationView.
             listDataCapsules = new HashMap<String, ArrayList<Capsule>>();
 
             for (CapsuleType type : listCapsuleType) {
-                types.add(type.getName());
                 ArrayList<Capsule> capsulesByType = capsuleHelper.getAllCapsulesByType(type.getId());
-                listDataCapsules.put(type.getName(), capsulesByType);
+                if (capsulesByType.size() > 0) {
+                    types.add(type.getName());
+                    listDataCapsules.put(type.getName(), capsulesByType);
+                }
             }
 
             return null;

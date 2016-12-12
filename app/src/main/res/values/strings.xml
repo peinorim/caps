@@ -35,6 +35,9 @@
     <string name="daily_conso">Daily consumption of %1$s</string>
     <string name="consoPreview">You will run out of %1$s around %2$s</string>
     <string name="consoOut">You will be short of %1$s tomorrow</string>
-
+    <string name="addCapsules">Add custom capsules</string>
+    <string name="customCapsules">Custom capsules</string>
+    <string name="capsuleName">Capsule Name</string>
+    <string name="nameEmpty">Capsule name cannot be empty</string>
 
 </resources>

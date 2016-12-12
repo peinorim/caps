@@ -24,6 +24,10 @@
     <string name="consoOut">Vous serez à court de %1$s d\'ici demain</string>
     <string name="order_url">https://www.nespresso.com/mobile/fr/fr/catalog</string>
     <string name="order">Commander des capsules Nespresso</string>
+    <string name="addCapsules">Ajouter des capsules personnalisées</string>
+    <string name="customCapsules">Capsules personnalisées</string>
+    <string name="capsuleName">Nom de la capsule</string>
+    <string name="nameEmpty">Le nom de capsule ne doit pas être vide</string>
 
 
 </resources>

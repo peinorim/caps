@@ -127,7 +127,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(4, '" + context.getResources().getString(R.string.decaffeinato) + "'),\n" +
                 "(5, '" + context.getResources().getString(R.string.pureOrigin) + "'),\n" +
                 "(6, '" + context.getResources().getString(R.string.variations) + "'),\n" +
-                "(7, '" + context.getResources().getString(R.string.variations_limited) + "')";
+                "(7, '" + context.getResources().getString(R.string.variations_limited) + "'),\n" +
+                "(8, '" + context.getResources().getString(R.string.customCapsules) + "')";
     }
 }
 

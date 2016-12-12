@@ -7,9 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -89,14 +94,26 @@ public class MainActivity extends AppCompatActivity
         types = getIntent().getStringArrayListExtra("types");
         capsuleHelper = new CapsuleHelper(getBaseContext());
 
-        if (types != null && listDataCapsules != null && types.size() > 0 && listDataCapsules.size() > 0) {
-            expListView = (ExpandableListView) findViewById(R.id.first_list);
-            listAdapter = new CapsuleExpandableListAdapter(this, types, listDataCapsules);
+        if (types == null || listDataCapsules == null || types.size() == 0 || listDataCapsules.size() == 0) {
+            types = new ArrayList<String>();
+            CapsuleTypeHelper capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
+            listCapsuleType = capsuleTypeHelper.getAllCapsuleTypes();
+            listDataCapsules = new HashMap<String, ArrayList<Capsule>>();
 
-            // setting list adapter
-            expListView.setAdapter(listAdapter);
-            onExpandableClickListener();
+            for (CapsuleType type : listCapsuleType) {
+                ArrayList<Capsule> capsulesByType = capsuleHelper.getAllCapsulesByType(type.getId());
+                if (capsulesByType.size() > 0) {
+                    types.add(type.getName());
+                    listDataCapsules.put(type.getName(), capsulesByType);
+                }
+            }
         }
+
+        expListView = (ExpandableListView) findViewById(R.id.first_list);
+        listAdapter = new CapsuleExpandableListAdapter(this, types, listDataCapsules);
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
+        onExpandableClickListener();
 
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -168,6 +185,7 @@ public class MainActivity extends AppCompatActivity
                             capsuleHelper.updateCapsule(cap);
                             TextView majQty = (TextView) currentView.findViewById(R.id.capsuleqty);
                             majQty.setText(getResources().getString(R.string.capsulesQty, qty));
+                            majAlertConso(currentView, cap);
                         }
                     }
                 })
@@ -293,6 +311,31 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void majAlertConso(View convertView, Capsule currentcapsule) {
+
+        ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
+        if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
+            long days = Math.round(Math.floor(currentcapsule.getQty() / currentcapsule.getConso()));
+            if (days <= 5) {
+                changeBtnColor(btnConso, R.color.red_darken3);
+            } else {
+                changeBtnColor(btnConso, R.color.black);
+            }
+        } else {
+            changeBtnColor(btnConso, R.color.black);
+        }
+    }
+
+    private void changeBtnColor(View btnConso, int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            btnConso.getBackground().setColorFilter(getApplicationContext().getResources().getColor(color), PorterDuff.Mode.SRC_IN);
+        } else {
+            Drawable wrapDrawable = DrawableCompat.wrap(btnConso.getBackground());
+            DrawableCompat.setTint(wrapDrawable, getApplicationContext().getResources().getColor(color));
+            btnConso.setBackgroundDrawable(DrawableCompat.unwrap(wrapDrawable));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -303,6 +346,12 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             return true;
+        } else if (id == R.id.action_add) {
+            Intent intent = new Intent(this, AddActivity.class);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            finish();
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -331,6 +380,8 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url)));
         } else if (id == R.id.nav_order) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.order_url)));
+        } else if (id == R.id.nav_add) {
+            intent = new Intent(this, AddActivity.class);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

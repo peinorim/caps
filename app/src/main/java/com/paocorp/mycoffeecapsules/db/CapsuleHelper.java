@@ -82,6 +82,27 @@ public class CapsuleHelper extends DatabaseHelper {
         return 0;
     }
 
+    public long insertCustomCapsule(Capsule capsule) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CAPSULE_NAME, capsule.getName());
+        values.put(COLUMN_CAPSULE_IMG, capsule.getImg());
+        values.put(COLUMN_CAPSULE_QTY, capsule.getQty());
+        values.put(COLUMN_CAPSULE_CONSO, capsule.getConso());
+        values.put(COLUMN_CAPSULE_NOTIF, capsule.getNotif());
+        values.put(COLUMN_CAPSULE_TYPE, "8");
+
+        try {
+            if (!capsule.getName().trim().isEmpty()) {
+                return db.insert(TABLE_CAPSULE, null, values);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public ArrayList<Capsule> getSearchCapsules(CapsuleType type, String query) {
         String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase() + "%'";
         SQLiteDatabase db = this.getReadableDatabase();

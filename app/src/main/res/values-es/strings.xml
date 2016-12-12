@@ -24,4 +24,8 @@
     <string name="share_fb">Compartir en Facebook</string>
     <string name="variations">Variations</string>
     <string name="variations_limited">Variations Limited Edition</string>
+    <string name="addCapsules">Añadir cápsulas personalizadas</string>
+    <string name="customCapsules">Cápsulas personalizadas</string>
+    <string name="nameEmpty">El nombre de la cápsula no puede estar vacío</string>
+    <string name="capsuleName">Nombre de la Cápsula</string>
 </resources>

@@ -164,7 +164,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    public void majAlertConso(View convertView, Capsule currentcapsule) {
+    private void majAlertConso(View convertView, Capsule currentcapsule) {
 
         ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
         if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
