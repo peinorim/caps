@@ -28,6 +28,15 @@
     <string name="customCapsules">Capsules personnalisées</string>
     <string name="capsuleName">Nom de la capsule</string>
     <string name="nameEmpty">Le nom de capsule ne doit pas être vide</string>
+    <string name="exportCapsules">Exporter au format Excel</string>
+    <string name="colType">Type de capsule</string>
+    <string name="colQty">Quantité</string>
+    <string name="colName">Nom de capsule</string>
+    <string name="colConso">Consommation quotidienne</string>
+    <string name="check">Vérifier</string>
+    <string name="permissionDenied">Permission de stockage refusée</string>
+    <string name="exportSuccess">Données exportées correctement</string>
+    <string name="see">Voir</string>
 
 
 </resources>

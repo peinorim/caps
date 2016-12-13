@@ -2,16 +2,28 @@ package com.paocorp.mycoffeecapsules.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.os.Environment;
 
+import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.models.Capsule;
 import com.paocorp.mycoffeecapsules.models.CapsuleType;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.Normalizer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
+import java.util.Locale;
 
 public class CapsuleHelper extends DatabaseHelper {
+
+    private static final String SEPARATOR = ",";
 
     public CapsuleHelper(Context context) {
         super(context);
@@ -128,5 +140,86 @@ public class CapsuleHelper extends DatabaseHelper {
         return allCapsules;
     }
 
+    public boolean exportDatabase() {
+        /**First of all we check if the external storage of the device is available for writing.
+         * Remember that the external storage is not necessarily the sd card. Very often it is
+         * the device storage.
+         */
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            return false;
+        } else {
+            //We use the Download directory for saving our .csv file.
+            File exportDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            }
+
+            File file;
+            PrintWriter printWriter = null;
+            try {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int permissionCheck = context.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                        return false;
+                    }
+                }
+                SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd", Locale.getDefault());
+                String fileName = "capsules_" + format.format(new Date()) + ".csv";
+                file = new File(exportDir, fileName);
+                file.createNewFile();
+                printWriter = new PrintWriter(new FileWriter(file));
+
+                /**This is our database connector class that reads the data from the database.
+                 * The code of this class is omitted for brevity.
+                 */
+                SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
+
+                /**Let's read the first table of the database.
+                 * getFirstTable() is a method in our DBCOurDatabaseConnector class which retrieves a Cursor
+                 * containing all records of the table (all fields).
+                 * The code of this class is omitted for brevity.
+                 */
+                Cursor curCSV = db.rawQuery("SELECT " + COLUMN_CAPSULE_NAME + "," + COLUMN_CAPSULE_QTY + "," + COLUMN_CAPSULE_CONSO
+                        + ", capsule_type.capsule_type_name as type_name FROM " + TABLE_CAPSULE + ", " + TABLE_CAPSULE_TYPE + " WHERE capsules." + COLUMN_CAPSULE_TYPE + " = capsule_type." + COLUMN_CAPSULE_TYPE_ID + " ORDER BY " + COLUMN_CAPSULE_NAME + " ASC", null);
+                //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
+                printWriter.println(stripAccents(context.getResources().getString(R.string.colName))
+                        + SEPARATOR + stripAccents(context.getResources().getString(R.string.colQty))
+                        + SEPARATOR + stripAccents(context.getResources().getString(R.string.colConso))
+                        + SEPARATOR + stripAccents(context.getResources().getString(R.string.colType)));
+                while (curCSV.moveToNext()) {
+                    String name = stripAccents(curCSV.getString(curCSV.getColumnIndex(COLUMN_CAPSULE_NAME)).replace(SEPARATOR, " "));
+                    int qty = curCSV.getInt(curCSV.getColumnIndex(COLUMN_CAPSULE_QTY));
+                    int conso = curCSV.getInt(curCSV.getColumnIndex(COLUMN_CAPSULE_CONSO));
+                    String type_name = stripAccents(curCSV.getString(curCSV.getColumnIndex("type_name")).replace(SEPARATOR, " "));
+
+                    /**Create the line to write in the .csv file.
+                     * We need a String where values are comma separated.
+                     * The field date (Long) is formatted in a readable text. The amount field
+                     * is converted into String.
+                     */
+                    String record = name + SEPARATOR + qty + SEPARATOR + conso + SEPARATOR + type_name;
+                    printWriter.println(record); //write the record in the .csv file
+                }
+
+                curCSV.close();
+                db.close();
+            } catch (Exception exc) {
+                //if there are any exceptions, return false
+                return false;
+            } finally {
+                if (printWriter != null) printWriter.close();
+            }
+
+            //If there are no errors, return true.
+            return true;
+        }
+    }
+
+    private String stripAccents(String s) {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return s;
+    }
 
 }

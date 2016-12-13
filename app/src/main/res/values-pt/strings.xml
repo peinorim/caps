@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">As minhas cápsulas de café</string>
+    <string name="app_name">Meus cápsulas de café</string>
     <string name="action_cancel">Cancelar</string>
     <string name="action_confirm">Confirmar</string>
     <string name="action_settings">Configurações</string>
@@ -28,4 +28,13 @@
     <string name="customCapsules">Cápsulas personalizadas</string>
     <string name="capsuleName">Nome da Cápsula</string>
     <string name="nameEmpty">O nome da cápsula não pode ficar em branco</string>
+    <string name="colType">Tipo de cápsula</string>
+    <string name="colQty">Quantidade</string>
+    <string name="colName">Nome cápsula</string>
+    <string name="colConso">O consumo diário</string>
+    <string name="exportCapsules">Exportar para Excel</string>
+    <string name="check">Verificar</string>
+    <string name="exportSuccess">Dados exportados corretamente</string>
+    <string name="permissionDenied">Permissão de armazenamento negada</string>
+    <string name="see">Vista</string>
 </resources>

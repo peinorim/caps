@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.paocorp.mycoffeecapsules.R;
@@ -24,6 +26,15 @@ public class AddActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupActionBar();
+
+        Spinner spinner = (Spinner) findViewById(R.id.img_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.caps_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
     }
 
@@ -58,13 +69,31 @@ public class AddActivity extends AppCompatActivity {
             setIntent = new Intent(this, MainActivity.class);
         } else if (id == R.id.action_valid) {
             TextView tvName = (TextView) findViewById(R.id.edit_capsulename);
+            Spinner spinner = (Spinner) findViewById(R.id.img_spinner);
+            String spinColor = spinner.getSelectedItem().toString().toLowerCase();
+            String imgColor = "custom";
+
+            if (spinColor.length() > 0) {
+                switch (spinColor) {
+                    case "red":
+                        imgColor = "custom_red";
+                        break;
+                    case "black":
+                        imgColor = "custom_black";
+                        break;
+                    default:
+                        imgColor = "custom";
+                        break;
+                }
+            }
+
             if (tvName != null) {
                 String capname = tvName.getText().toString().trim();
                 if (!capname.isEmpty()) {
                     tvName.getBackground().mutate().setColorFilter(getResources().getColor(R.color.green_darken1), PorterDuff.Mode.SRC_ATOP);
                     Capsule capsule = new Capsule();
                     capsule.setName(capname.substring(0, 1).toUpperCase() + capname.substring(1));
-                    capsule.setImg("custom");
+                    capsule.setImg(imgColor);
                     capsule.setQty(0);
                     capsule.setConso(0);
                     capsule.setNotif(0);

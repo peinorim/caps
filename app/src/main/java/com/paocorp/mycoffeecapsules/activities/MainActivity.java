@@ -1,5 +1,6 @@
 package com.paocorp.mycoffeecapsules.activities;
 
+import android.app.DownloadManager;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +13,10 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     CapsuleTypeHelper capsuleTypeHelper;
     ArrayList<CapsuleType> listCapsuleType;
     boolean modif = false;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         LayoutInflater.from(this).inflate(R.layout.nav_header_main, navigationView);
@@ -382,6 +387,48 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.order_url)));
         } else if (id == R.id.nav_add) {
             intent = new Intent(this, AddActivity.class);
+        } else if (id == R.id.nav_export) {
+            if (!capsuleHelper.exportDatabase()) {
+                Snackbar snackbar = Snackbar
+                        .make(navigationView, getResources().getString(R.string.permissionDenied), Snackbar.LENGTH_LONG)
+                        .setAction(getResources().getString(R.string.check).toUpperCase(), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                final Intent i = new Intent();
+                                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                i.addCategory(Intent.CATEGORY_DEFAULT);
+                                i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                getApplicationContext().startActivity(i);
+                            }
+                        });
+
+                snackbar.setActionTextColor(getApplicationContext().getResources().getColor(R.color.yellow_darken1));
+                snackbar.show();
+            } else {
+                Snackbar snackbar = Snackbar
+                        .make(navigationView, getResources().getString(R.string.exportSuccess), Snackbar.LENGTH_LONG)
+                        .setAction(getResources().getString(R.string.see).toUpperCase(), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Uri selectedUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath());
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setDataAndType(selectedUri, "resource/folder");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                getApplicationContext().startActivity(intent);
+                            }
+                        });
+
+                snackbar.setActionTextColor(getApplicationContext().getResources().getColor(R.color.yellow_darken1));
+                snackbar.show();
+            }
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -393,4 +440,5 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
         return true;
     }
+
 }

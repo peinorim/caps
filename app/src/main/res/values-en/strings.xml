@@ -28,6 +28,15 @@
     <string name="customCapsules">Custom capsules</string>
     <string name="capsuleName">Capsule Name</string>
     <string name="nameEmpty">Capsule name cannot be empty</string>
+    <string name="exportCapsules">Export capsules data to Excel format</string>
+    <string name="colConso">Daily consumption</string>
+    <string name="colName">Capsule Name</string>
+    <string name="colQty">Amount</string>
+    <string name="colType">Type name</string>
+    <string name="permissionDenied">Storage permission denied</string>
+    <string name="check">Check</string>
+    <string name="exportSuccess">Data exported correctly</string>
+    <string name="see">See</string>
 
 
 </resources>

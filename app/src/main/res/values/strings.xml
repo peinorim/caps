@@ -7,7 +7,7 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules in stock</string>
-    <string name="capsulesTitle">%1$s Capsules  in stock</string>
+    <string name="capsulesTitle">%1$s Capsules in stock</string>
     <string name="rate_app">Noter cette application</string>
     <string name="order">Order Nespresso Capsules</string>
     <string name="share">Share</string>
@@ -39,5 +39,14 @@
     <string name="customCapsules">Custom capsules</string>
     <string name="capsuleName">Capsule Name</string>
     <string name="nameEmpty">Capsule name cannot be empty</string>
+    <string name="exportCapsules">Export capsules data to Excel format</string>
+    <string name="colName">Capsule Name</string>
+    <string name="colQty">Amount</string>
+    <string name="colConso">Daily consumption</string>
+    <string name="colType">Type name</string>
+    <string name="permissionDenied">Storage permission denied</string>
+    <string name="check">Check</string>
+    <string name="exportSuccess">Data exported correctly</string>
+    <string name="see">See</string>
 
 </resources>
