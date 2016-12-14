@@ -37,6 +37,14 @@
     <string name="permissionDenied">Permission de stockage refusée</string>
     <string name="exportSuccess">Données exportées correctement</string>
     <string name="see">Voir</string>
+    <string name="capColor">Couleur de capsule :</string>
+    <string name="orange">Orange</string>
+    <string name="violet">Violet</string>
+    <string name="black">Noire</string>
+    <string name="blue">Bleue</string>
+    <string name="gold">Dorée</string>
+    <string name="green">Verte</string>
+    <string name="brown">Marron</string>
 
 
 </resources>

@@ -74,16 +74,20 @@ public class AddActivity extends AppCompatActivity {
             String imgColor = "custom";
 
             if (spinColor.length() > 0) {
-                switch (spinColor) {
-                    case "red":
-                        imgColor = "custom_red";
-                        break;
-                    case "black":
-                        imgColor = "custom_black";
-                        break;
-                    default:
-                        imgColor = "custom";
-                        break;
+                if (spinColor.equals(getResources().getString(R.string.black).toLowerCase())) {
+                    imgColor = "custom_black";
+                } else if (spinColor.equals(getResources().getString(R.string.blue).toLowerCase())) {
+                    imgColor = "custom_blue";
+                } else if (spinColor.equals(getResources().getString(R.string.gold).toLowerCase())) {
+                    imgColor = "custom_gold";
+                } else if (spinColor.equals(getResources().getString(R.string.green).toLowerCase())) {
+                    imgColor = "custom_green";
+                } else if (spinColor.equals(getResources().getString(R.string.orange).toLowerCase())) {
+                    imgColor = "custom_orange";
+                } else if (spinColor.equals(getResources().getString(R.string.violet).toLowerCase())) {
+                    imgColor = "custom_violet";
+                } else {
+                    imgColor = "custom";
                 }
             }
 

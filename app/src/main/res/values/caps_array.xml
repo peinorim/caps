@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="caps_array">
-        <item>Red</item>
-        <item>Black</item>
+        <item>@string/brown</item>
+        <item>@string/black</item>
+        <item>@string/blue</item>
+        <item>@string/gold</item>
+        <item>@string/green</item>
+        <item>@string/orange</item>
+        <item>@string/violet</item>
     </string-array>
 </resources>

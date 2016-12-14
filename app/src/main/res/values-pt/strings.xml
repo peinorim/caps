@@ -37,4 +37,12 @@
     <string name="exportSuccess">Dados exportados corretamente</string>
     <string name="permissionDenied">Permissão de armazenamento negada</string>
     <string name="see">Vista</string>
+    <string name="black">Preto</string>
+    <string name="gold">Dourado</string>
+    <string name="green">Verde</string>
+    <string name="orange">Laranja</string>
+    <string name="violet">Violeta</string>
+    <string name="blue">Azul</string>
+    <string name="capColor">Cor cápsula :</string>
+    <string name="brown">Marrom</string>
 </resources>
