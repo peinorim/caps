@@ -155,59 +155,64 @@ public class MainActivity extends AppCompatActivity
                 currentView = v;
                 int capId = listAdapter.getChild(groupPosition, childPosition).getId();
                 if (capId != 0) {
-                    createQtyDialog(capsuleHelper.getCapsuleById(capId));
+                    createQtyDialog(capsuleHelper.getCapsuleById(capId).getId());
                 }
                 return false;
             }
         });
     }
 
-    public void createQtyDialog(final Capsule currentCapsule) {
+    public void createQtyDialog(final int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         final View v = inflater.inflate(R.layout.qty_dialog, null);
         builder.setCancelable(true);
+        final CapsuleHelper capsuleHelper = new CapsuleHelper(getApplicationContext());
+        final Capsule currentCapsule = capsuleHelper.getCapsuleById(id);
 
-        nb = (NumberPicker) v.findViewById(R.id.qty);
-        TextView dialogTitle = (TextView) v.findViewById(R.id.dialogTitle);
-        dialogTitle.setText(getResources().getString(R.string.capsulesTitle, currentCapsule.getName()));
-        modif = false;
+        if (currentCapsule != null) {
 
-        builder.setView(v)
-                .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        int capsuleId = currentCapsule.getId();
-                        nb = (NumberPicker) v.findViewById(R.id.qty);
-                        int qty = nb.getValue();
+            nb = (NumberPicker) v.findViewById(R.id.qty);
+            TextView dialogTitle = (TextView) v.findViewById(R.id.dialogTitle);
+            dialogTitle.setText(getResources().getString(R.string.capsulesTitle, currentCapsule.getName()));
+            modif = false;
 
-                        Capsule cap = capsuleHelper.getCapsuleById(capsuleId);
-                        if (cap != null) {
-                            modif = true;
-                            cap.setQty(qty);
-                            capsuleHelper.updateCapsule(cap);
-                            TextView majQty = (TextView) currentView.findViewById(R.id.capsuleqty);
-                            majQty.setText(getResources().getString(R.string.capsulesQty, qty));
-                            majAlertConso(currentView, cap);
+            builder.setView(v)
+                    .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int capsuleId = currentCapsule.getId();
+                            nb = (NumberPicker) v.findViewById(R.id.qty);
+                            int qty = nb.getValue();
+
+                            Capsule cap = capsuleHelper.getCapsuleById(capsuleId);
+                            if (cap != null) {
+                                modif = true;
+                                cap.setQty(qty);
+                                capsuleHelper.updateCapsule(cap);
+                                TextView majQty = (TextView) currentView.findViewById(R.id.capsuleqty);
+                                majQty.setText(getResources().getString(R.string.capsulesQty, qty));
+                                majAlertConso(currentView, cap);
+                            }
                         }
-                    }
-                })
-                .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
+                    })
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
 
-        AlertDialog alert = builder.create();
+            AlertDialog alert = builder.create();
 
-        nb.getWrapSelectorWheel();
-        nb.setMinValue(0);
-        nb.setMaxValue(10000);
-        nb.setValue(currentCapsule.getQty());
+            nb.getWrapSelectorWheel();
+            nb.setMinValue(0);
+            nb.setMaxValue(10000);
+            nb.setValue(currentCapsule.getQty());
 
-        alert.show();
-        adView = (AdView) v.findViewById(R.id.banner_bottom);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+            alert.show();
+            adView = (AdView) v.findViewById(R.id.banner_bottom);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
     }
 
     protected void requestNewInterstitial() {
@@ -276,7 +281,7 @@ public class MainActivity extends AppCompatActivity
                                                         int groupPosition, int childPosition, long id) {
                                 currentView = v;
                                 Capsule currentCapsule = searchListAdapter.getChild(groupPosition, childPosition);
-                                createQtyDialog(currentCapsule);
+                                createQtyDialog(currentCapsule.getId());
                                 return false;
                             }
                         });

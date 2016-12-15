@@ -12,33 +12,29 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/dialogTitle"
+            android:id="@+id/deleteTitle"
             android:layout_width="match_parent"
             android:layout_height="64sp"
-            android:background="@color/yellow_darken4"
+            android:background="@color/teal"
             android:gravity="center_horizontal|center_vertical"
             android:scaleType="center"
-            android:text="@string/capsulesTitle"
+            android:text="@string/deleteTitle"
             android:textColor="@color/white"
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
 
-        <com.paocorp.mycoffeecapsules.models.Numberpicker
-            android:id="@+id/qty"
+        <TextView
+            android:id="@+id/deleteInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/dialogTitle" />
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/banner_bottom"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="55dp"
-            android:layout_below="@+id/qty"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_bottom" />
+            android:layout_below="@+id/deleteTitle"
+            android:layout_marginTop="20sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:scaleType="center"
+            android:text="@string/deleteInfo"
+            android:textColor="@color/black"
+            android:textSize="@dimen/subheading_text_size"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </ScrollView>

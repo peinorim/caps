@@ -8,6 +8,8 @@
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules in stock</string>
     <string name="capsulesTitle">%1$s Capsules in stock</string>
+    <string name="deleteTitle">Delete %1$s capsules</string>
+    <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
     <string name="rate_app">Noter cette application</string>
     <string name="order">Order Nespresso Capsules</string>
     <string name="share">Share</string>

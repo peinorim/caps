@@ -1,6 +1,7 @@
 My Coffee Capsules
 =============
 
+* v1.4 : remove custom capsules
 * v1.3 : Export data to csv
 * v1.2 : Add custom capsules
 * v1.1 : Stock previsions + en, pt locales

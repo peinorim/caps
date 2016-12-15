@@ -9,27 +9,29 @@ import com.paocorp.mycoffeecapsules.R;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     protected Context context;
-    protected static final int DATABASE_VERSION = 1;
-    protected static final String DATABASE_NAME = "dbcaps";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "dbcaps";
 
     // Logcat tag
     protected static final String LOG = "DatabaseHelper";
 
     // TABLES NAMES
-    protected static final String TABLE_CAPSULE = "capsules";
-    protected static final String TABLE_CAPSULE_TYPE = "capsule_type";
+    static final String TABLE_CAPSULE = "capsules";
+    static final String TABLE_CAPSULE_TYPE = "capsule_type";
 
     // CAPSULES COLUMNS NAMES
-    protected static final String COLUMN_CAPSULE_ID = "capsules_id";
-    protected static final String COLUMN_CAPSULE_NAME = "capsules_name";
-    protected static final String COLUMN_CAPSULE_QTY = "capsules_qty";
-    protected static final String COLUMN_CAPSULE_IMG = "capsules_img";
-    protected static final String COLUMN_CAPSULE_CONSO = "capsules_conso";
-    protected static final String COLUMN_CAPSULE_TYPE = "capsules_type";
-    protected static final String COLUMN_CAPSULE_NOTIF = "capsules_notif";
+    static final String COLUMN_CAPSULE_ID = "capsules_id";
+    static final String COLUMN_CAPSULE_NAME = "capsules_name";
+    static final String COLUMN_CAPSULE_QTY = "capsules_qty";
+    static final String COLUMN_CAPSULE_IMG = "capsules_img";
+    static final String COLUMN_CAPSULE_CONSO = "capsules_conso";
+    static final String COLUMN_CAPSULE_TYPE = "capsules_type";
+    static final String COLUMN_CAPSULE_NOTIF = "capsules_notif";
 
-    protected static final String COLUMN_CAPSULE_TYPE_ID = "capsule_type_id";
-    protected static final String COLUMN_CAPSULE_TYPE_NAME = "capsule_type_name";
+    static final String COLUMN_CAPSULE_TYPE_ID = "capsule_type_id";
+    static final String COLUMN_CAPSULE_TYPE_NAME = "capsule_type_name";
+
+    public static final int CUSTOM_TYPE_ID = 8;
 
     // CAPSULES TABLE CREATE STATEMENT
     private static final String TABLE_CREATE_CAPSULES =
@@ -128,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "(5, '" + context.getResources().getString(R.string.pureOrigin) + "'),\n" +
                 "(6, '" + context.getResources().getString(R.string.variations) + "'),\n" +
                 "(7, '" + context.getResources().getString(R.string.variations_limited) + "'),\n" +
-                "(8, '" + context.getResources().getString(R.string.customCapsules) + "')";
+                "(" + CUSTOM_TYPE_ID + ", '" + context.getResources().getString(R.string.customCapsules) + "')";
     }
 }
 

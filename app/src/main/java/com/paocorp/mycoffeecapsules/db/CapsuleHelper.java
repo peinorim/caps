@@ -94,6 +94,18 @@ public class CapsuleHelper extends DatabaseHelper {
         return 0;
     }
 
+    public int deleteCapsule(Capsule capsule) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        try {
+            return db.delete(TABLE_CAPSULE, COLUMN_CAPSULE_ID + " = ?",
+                    new String[]{String.valueOf(capsule.getId())});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public long insertCustomCapsule(Capsule capsule) {
         SQLiteDatabase db = this.getWritableDatabase();
 

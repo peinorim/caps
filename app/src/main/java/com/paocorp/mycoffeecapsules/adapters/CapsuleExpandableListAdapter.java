@@ -16,12 +16,14 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
+import com.paocorp.mycoffeecapsules.db.DatabaseHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
 
 import java.text.DateFormat;
@@ -62,14 +64,14 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        Capsule currentcapsule = getChild(groupPosition, childPosition);
-        if (currentcapsule != null) {
-            final String capName = currentcapsule.getName();
-            final String capImg = currentcapsule.getImg();
-            final int capQty = currentcapsule.getQty();
+        Capsule currentCapsule = getChild(groupPosition, childPosition);
+        if (currentCapsule != null) {
+            final String capName = currentCapsule.getName();
+            final String capImg = currentCapsule.getImg();
+            final int capQty = currentCapsule.getQty();
 
             if (convertView == null) {
                 LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -92,8 +94,24 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 capsule_img.setImageDrawable(drawable);
             }
 
+            ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.capsuledelete);
+            if (currentCapsule.getType() == DatabaseHelper.CUSTOM_TYPE_ID) {
+                btnDelete.setTag(currentCapsule.getId());
+                btnDelete.setVisibility(View.VISIBLE);
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final int capId = (Integer) v.getTag();
+                        deleteDialog(groupPosition, childPosition, capId);
+                    }
+                });
+            } else {
+                btnDelete.setVisibility(View.GONE);
+            }
+
             ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
-            btnConso.setTag(currentcapsule.getId());
+            btnConso.setTag(currentCapsule.getId());
             btnConso.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -103,7 +121,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 }
             });
 
-            majAlertConso(convertView, currentcapsule);
+            majAlertConso(convertView, currentCapsule);
 
         }
 
@@ -161,6 +179,41 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             AdView adView = (AdView) v.findViewById(R.id.banner_bottom);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
+        }
+    }
+
+    private void deleteDialog(final int groupPosition, final int childPosition, int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View v = inflater.inflate(R.layout.delete_dialog, null);
+        builder.setCancelable(true);
+        final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
+        final Capsule capsule = capsuleHelper.getCapsuleById(id);
+
+        if (capsule != null) {
+            TextView deleteTitle = (TextView) v.findViewById(R.id.deleteTitle);
+            deleteTitle.setText(context.getResources().getString(R.string.deleteTitle, capsule.getName()));
+
+            builder.setView(v)
+                    .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            capsuleHelper.deleteCapsule(capsule);
+
+                            listDataChild.get(listDataHeader.get(groupPosition)).remove(childPosition);
+                            if (listDataChild.get(listDataHeader.get(groupPosition)).size() == 0) {
+                                listDataHeader.remove(groupPosition);
+                            }
+                            notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+
         }
     }
 
