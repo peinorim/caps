@@ -45,6 +45,7 @@
     <string name="gold">Dorée</string>
     <string name="green">Verte</string>
     <string name="brown">Marron</string>
-
+    <string name="deleteTitle">Supprimer capsules de %1$s</string>
+    <string name="deleteInfo">Etes-vous sûr de supprimer cette capsule ?\n Cette action est irréversible.</string>
 
 </resources>

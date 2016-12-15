@@ -45,4 +45,6 @@
     <string name="blue">Azul</string>
     <string name="capColor">Color de la cápsula :</string>
     <string name="brown">Marrón</string>
+    <string name="deleteInfo">¿Seguro eliminar esta cápsula?\n Esta acción es irreversible.</string>
+    <string name="deleteTitle">Eliminar cápsulas de %1$s</string>
 </resources>

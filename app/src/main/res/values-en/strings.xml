@@ -45,6 +45,7 @@
     <string name="orange">Orange</string>
     <string name="violet">Purple</string>
     <string name="brown">Brown</string>
-
+    <string name="deleteTitle">Delete %1$s capsules</string>
+    <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
 
 </resources>
