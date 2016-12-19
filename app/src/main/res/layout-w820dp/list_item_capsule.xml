@@ -2,31 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10sp"
     android:layout_marginTop="5dp"
-    android:descendantFocusability="blocksDescendants"
-    android:layout_margin="5sp">
+    android:descendantFocusability="blocksDescendants">
 
 
     <ImageView
         android:id="@+id/capsuleimg"
-        android:layout_width="70sp"
-        android:layout_height="70sp" />
+        android:layout_width="100sp"
+        android:layout_height="100sp" />
 
     <RelativeLayout
-        android:layout_width="300sp"
+        android:layout_width="500sp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/capsuleimg"
         android:paddingLeft="20sp">
 
         <LinearLayout
             android:id="@+id/nameBlock"
-            android:padding="5sp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minWidth="300sp"
+            android:padding="5sp">
 
             <TextView
                 android:id="@+id/capsulename"
-                android:layout_width="200sp"
+                android:layout_width="300sp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:hint="Capsule Name"
@@ -39,22 +40,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/ic_delete_black_24dp"
-                android:visibility="visible"
                 android:layout_marginLeft="10sp"
-                android:padding="10sp" />
+                android:background="@drawable/ic_delete_black_24dp"
+                android:padding="12sp"
+                android:visibility="visible" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/qtyBlock"
-            android:padding="5sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/nameBlock">
+            android:layout_below="@+id/nameBlock"
+            android:padding="5sp">
 
             <TextView
                 android:id="@+id/capsuleqty"
-                android:layout_width="200sp"
+                android:layout_width="300sp"
                 android:layout_height="50sp"
                 android:gravity="center"
                 android:hint="@string/capsulesQty"
@@ -66,10 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="10sp"
                 android:layout_marginLeft="10sp"
+                android:layout_marginTop="10sp"
                 android:background="@drawable/ic_date_range_black_24dp"
-                android:padding="10sp" />
+                android:padding="12sp" />
         </LinearLayout>
     </RelativeLayout>
 
