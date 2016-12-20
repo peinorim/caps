@@ -16,7 +16,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -38,9 +37,8 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, ArrayList<Capsule>> listDataChild;
-    private HashMap<Integer, Integer> listMinus = new HashMap<>();
-    private HashMap<Integer, Integer> listPlus = new HashMap<>();
-    View baseView;
+    NumberPicker nb;
+    AdView adView;
 
     public CapsuleExpandableListAdapter(Context context, List<String> listDataHeader,
                                         HashMap<String, ArrayList<Capsule>> listChildData) {
@@ -79,19 +77,48 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 convertView = infalInflater.inflate(R.layout.list_item_capsule, null);
             }
 
-            baseView = convertView;
-
             TextView tvName = (TextView) convertView.findViewById(R.id.capsulename);
             tvName.setText(capName);
+            tvName.setTag(currentCapsule.getId());
+            tvName.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final int capId = (Integer) v.getTag();
+                    View parent = (View) v.getParent();
+                    createQtyDialog(groupPosition, childPosition, capId, parent);
+                }
+            });
+
 
             TextView tvQty = (TextView) convertView.findViewById(R.id.capsuleqty);
             tvQty.setText(context.getResources().getString(R.string.capsulesQty, capQty));
+            tvQty.setTag(currentCapsule.getId());
+            tvQty.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    final int capId = (Integer) v.getTag();
+                    View parent = (View) v.getParent();
+                    createQtyDialog(groupPosition, childPosition, capId, parent);
+                }
+            });
 
             ImageView capsule_img = (ImageView) convertView.findViewById(R.id.capsuleimg);
             int res = context.getResources().getIdentifier(capImg, "drawable", context.getPackageName());
+            capsule_img.setTag(currentCapsule.getId());
             if (res != 0) {
                 Drawable drawable = context.getResources().getDrawable(res);
                 capsule_img.setImageDrawable(drawable);
+                capsule_img.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final int capId = (Integer) v.getTag();
+                        View parent = (View) v.getParent();
+                        createQtyDialog(groupPosition, childPosition, capId, parent);
+                    }
+                });
             }
 
             ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.capsuledelete);
@@ -117,7 +144,8 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onClick(View v) {
                     final int capId = (Integer) v.getTag();
-                    consoDialog(baseView, capId);
+                    View parent = (View) v.getParent();
+                    consoDialog(parent, capId);
                 }
             });
 
@@ -126,6 +154,58 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         return convertView;
+    }
+
+    private void createQtyDialog(final int groupPosition, final int childPosition, final int id, final View parent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View v = inflater.inflate(R.layout.qty_dialog, null);
+        builder.setCancelable(true);
+        final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
+        final Capsule currentCapsule = capsuleHelper.getCapsuleById(id);
+
+        if (currentCapsule != null) {
+
+            nb = (NumberPicker) v.findViewById(R.id.qty);
+            TextView dialogTitle = (TextView) v.findViewById(R.id.dialogTitle);
+            dialogTitle.setText(context.getResources().getString(R.string.capsulesTitle, currentCapsule.getName()));
+
+            builder.setView(v)
+                    .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int capsuleId = currentCapsule.getId();
+                            nb = (NumberPicker) v.findViewById(R.id.qty);
+                            int qty = nb.getValue();
+
+                            Capsule cap = capsuleHelper.getCapsuleById(capsuleId);
+                            if (cap != null) {
+                                cap.setQty(qty);
+                                capsuleHelper.updateCapsule(cap);
+                                Capsule test = listDataChild.get(listDataHeader.get(groupPosition)).get(childPosition);
+                                test.setQty(qty);
+                                notifyDataSetChanged();
+                                majAlertConso(parent, currentCapsule);
+                            }
+                        }
+                    })
+                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            AlertDialog alert = builder.create();
+
+            nb.getWrapSelectorWheel();
+            nb.setMinValue(0);
+            nb.setMaxValue(10000);
+            nb.setValue(currentCapsule.getQty());
+
+            alert.show();
+            adView = (AdView) v.findViewById(R.id.banner_bottom);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
     }
 
     private void consoDialog(final View convertView, int id) {
@@ -220,15 +300,17 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     private void majAlertConso(View convertView, Capsule currentcapsule) {
 
         ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
-        if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
-            long days = Math.round(Math.floor(currentcapsule.getQty() / currentcapsule.getConso()));
-            if (days <= 5) {
-                changeBtnColor(btnConso, R.color.red_darken3);
+        if (btnConso != null) {
+            if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
+                long days = Math.round(Math.floor(currentcapsule.getQty() / currentcapsule.getConso()));
+                if (days <= 5) {
+                    changeBtnColor(btnConso, R.color.red_darken3);
+                } else {
+                    changeBtnColor(btnConso, R.color.black);
+                }
             } else {
                 changeBtnColor(btnConso, R.color.black);
             }
-        } else {
-            changeBtnColor(btnConso, R.color.black);
         }
     }
 

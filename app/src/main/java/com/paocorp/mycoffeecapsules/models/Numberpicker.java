@@ -6,9 +6,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
 
-public class Numberpicker extends android.widget.NumberPicker {
+public class NumberPicker extends android.widget.NumberPicker {
 
-    public Numberpicker(Context context, AttributeSet attrs) {
+    public NumberPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

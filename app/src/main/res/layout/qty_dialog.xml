@@ -3,11 +3,11 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="wrap_content"
+    android:fillViewport="false">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -23,22 +23,27 @@
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
 
-        <com.paocorp.mycoffeecapsules.models.Numberpicker
+        <com.paocorp.mycoffeecapsules.models.NumberPicker
             android:id="@+id/qty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dialogTitle" />
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/banner_bottom"
-            android:layout_width="fill_parent"
+        <RelativeLayout
+            android:id="@+id/rel_banner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="55dp"
-            android:layout_below="@+id/qty"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_bottom" />
+            android:layout_marginTop="5sp"
+            android:layout_below="@+id/qty">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/banner_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_bottom" />
+        </RelativeLayout>
 
     </RelativeLayout>
 </ScrollView>

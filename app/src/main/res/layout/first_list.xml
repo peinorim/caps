@@ -6,7 +6,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
     <ExpandableListView
         android:id="@+id/first_list"
         android:layout_width="match_parent"

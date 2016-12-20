@@ -23,7 +23,7 @@
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
 
-        <com.paocorp.mycoffeecapsules.models.Numberpicker
+        <com.paocorp.mycoffeecapsules.models.NumberPicker
             android:id="@+id/consoQty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,16 +42,21 @@
             android:textSize="@dimen/normal_text_size"
             android:textStyle="bold" />
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/banner_bottom"
-            android:layout_width="fill_parent"
+        <RelativeLayout
+            android:id="@+id/rel_banner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="55dp"
-            android:layout_below="@+id/consoPreview"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_bottom" />
+            android:layout_marginTop="5sp"
+            android:layout_below="@+id/consoPreview">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/banner_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/banner_bottom" />
+        </RelativeLayout>
 
     </RelativeLayout>
 </ScrollView>

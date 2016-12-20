@@ -2,24 +2,18 @@ package com.paocorp.mycoffeecapsules.activities;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -29,8 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -39,7 +31,6 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.adapters.CapsuleExpandableListAdapter;
@@ -62,16 +53,12 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> types;
     ExpandableListView expListView;
     ExpandableListView expListViewSearch;
-    NumberPicker nb;
     CapsuleHelper capsuleHelper;
-    View currentView;
     PackageInfo pInfo;
     ShareDialog shareDialog;
     CallbackManager callbackManager;
-    AdView adView;
     CapsuleTypeHelper capsuleTypeHelper;
     ArrayList<CapsuleType> listCapsuleType;
-    boolean modif = false;
     NavigationView navigationView;
 
     @Override
@@ -115,7 +102,6 @@ public class MainActivity extends AppCompatActivity
         listAdapter = new CapsuleExpandableListAdapter(this, types, listDataCapsules);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-        onExpandableClickListener();
 
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -143,75 +129,6 @@ public class MainActivity extends AppCompatActivity
                     hideAdObj.setHideAd(true);
                 }
             });
-        }
-    }
-
-    public void onExpandableClickListener() {
-        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
-                currentView = v;
-                int capId = listAdapter.getChild(groupPosition, childPosition).getId();
-                if (capId != 0) {
-                    createQtyDialog(capsuleHelper.getCapsuleById(capId).getId());
-                }
-                return false;
-            }
-        });
-    }
-
-    public void createQtyDialog(final int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View v = inflater.inflate(R.layout.qty_dialog, null);
-        builder.setCancelable(true);
-        final CapsuleHelper capsuleHelper = new CapsuleHelper(getApplicationContext());
-        final Capsule currentCapsule = capsuleHelper.getCapsuleById(id);
-
-        if (currentCapsule != null) {
-
-            nb = (NumberPicker) v.findViewById(R.id.qty);
-            TextView dialogTitle = (TextView) v.findViewById(R.id.dialogTitle);
-            dialogTitle.setText(getResources().getString(R.string.capsulesTitle, currentCapsule.getName()));
-            modif = false;
-
-            builder.setView(v)
-                    .setPositiveButton(R.string.action_confirm, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            int capsuleId = currentCapsule.getId();
-                            nb = (NumberPicker) v.findViewById(R.id.qty);
-                            int qty = nb.getValue();
-
-                            Capsule cap = capsuleHelper.getCapsuleById(capsuleId);
-                            if (cap != null) {
-                                modif = true;
-                                cap.setQty(qty);
-                                capsuleHelper.updateCapsule(cap);
-                                TextView majQty = (TextView) currentView.findViewById(R.id.capsuleqty);
-                                majQty.setText(getResources().getString(R.string.capsulesQty, qty));
-                                majAlertConso(currentView, cap);
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-            AlertDialog alert = builder.create();
-
-            nb.getWrapSelectorWheel();
-            nb.setMinValue(0);
-            nb.setMaxValue(10000);
-            nb.setValue(currentCapsule.getQty());
-
-            alert.show();
-            adView = (AdView) v.findViewById(R.id.banner_bottom);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
         }
     }
 
@@ -274,17 +191,6 @@ public class MainActivity extends AppCompatActivity
                     if (listDataCapsulesSearch.size() > 0) {
                         final CapsuleExpandableListAdapter searchListAdapter = new CapsuleExpandableListAdapter(MainActivity.this, types, listDataCapsulesSearch);
                         expListViewSearch.setAdapter(searchListAdapter);
-                        expListViewSearch.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-                            @Override
-                            public boolean onChildClick(ExpandableListView parent, View v,
-                                                        int groupPosition, int childPosition, long id) {
-                                currentView = v;
-                                Capsule currentCapsule = searchListAdapter.getChild(groupPosition, childPosition);
-                                createQtyDialog(currentCapsule.getId());
-                                return false;
-                            }
-                        });
                         findViewById(R.id.noResults).setVisibility(View.GONE);
                         findViewById(R.id.search_list).setVisibility(View.VISIBLE);
                     } else {
@@ -294,20 +200,17 @@ public class MainActivity extends AppCompatActivity
                     }
 
                 } else {
-                    if (modif) {
-                        capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
-                        listCapsuleType = capsuleTypeHelper.getAllCapsuleTypes();
-                        listDataCapsules = new HashMap<String, ArrayList<Capsule>>();
+                    capsuleTypeHelper = new CapsuleTypeHelper(getApplicationContext());
+                    listCapsuleType = capsuleTypeHelper.getAllCapsuleTypes();
+                    listDataCapsules = new HashMap<String, ArrayList<Capsule>>();
 
-                        for (CapsuleType type : listCapsuleType) {
-                            types.add(type.getName());
-                            ArrayList<Capsule> capsulesByType = capsuleHelper.getAllCapsulesByType(type.getId());
-                            listDataCapsules.put(type.getName(), capsulesByType);
-                        }
-                        listAdapter = new CapsuleExpandableListAdapter(getApplicationContext(), types, listDataCapsules);
-                        expListView.setAdapter(listAdapter);
-                        onExpandableClickListener();
+                    for (CapsuleType type : listCapsuleType) {
+                        types.add(type.getName());
+                        ArrayList<Capsule> capsulesByType = capsuleHelper.getAllCapsulesByType(type.getId());
+                        listDataCapsules.put(type.getName(), capsulesByType);
                     }
+                    listAdapter = new CapsuleExpandableListAdapter(getApplicationContext(), types, listDataCapsules);
+                    expListView.setAdapter(listAdapter);
 
                     findViewById(R.id.first_list).setVisibility(View.VISIBLE);
                     findViewById(R.id.capsules_search_container).setVisibility(View.GONE);
@@ -316,31 +219,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
         return true;
-    }
-
-    private void majAlertConso(View convertView, Capsule currentcapsule) {
-
-        ImageButton btnConso = (ImageButton) convertView.findViewById(R.id.capsuleconso);
-        if (Build.VERSION.SDK_INT >= 16 && currentcapsule.getQty() > 0 && currentcapsule.getConso() > 0) {
-            long days = Math.round(Math.floor(currentcapsule.getQty() / currentcapsule.getConso()));
-            if (days <= 5) {
-                changeBtnColor(btnConso, R.color.red_darken3);
-            } else {
-                changeBtnColor(btnConso, R.color.black);
-            }
-        } else {
-            changeBtnColor(btnConso, R.color.black);
-        }
-    }
-
-    private void changeBtnColor(View btnConso, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            btnConso.getBackground().setColorFilter(getApplicationContext().getResources().getColor(color), PorterDuff.Mode.SRC_IN);
-        } else {
-            Drawable wrapDrawable = DrawableCompat.wrap(btnConso.getBackground());
-            DrawableCompat.setTint(wrapDrawable, getApplicationContext().getResources().getColor(color));
-            btnConso.setBackgroundDrawable(DrawableCompat.unwrap(wrapDrawable));
-        }
     }
 
     @Override
