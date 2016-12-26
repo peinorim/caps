@@ -3,4 +3,9 @@
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
     <dimen name="activity_horizontal_margin">64dp</dimen>
+
+    <dimen name="padding_buttonLR">12dp</dimen>
+    <dimen name="padding_buttonTB">10dp</dimen>
+
+    <dimen name="plus_btn_width">90dp</dimen>
 </resources>

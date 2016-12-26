@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -201,7 +202,13 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             nb.setMaxValue(10000);
             nb.setValue(currentCapsule.getQty());
 
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(alert.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
             alert.show();
+            alert.getWindow().setAttributes(lp);
             adView = (AdView) v.findViewById(R.id.banner_bottom);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
@@ -237,6 +244,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                 } else {
                     consoPreview.setText(context.getResources().getString(R.string.consoOut, capsule.getName()));
                 }
+                consoPreview.setVisibility(View.VISIBLE);
             }
 
             builder.setView(v)
@@ -255,7 +263,12 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                     });
 
             AlertDialog alert = builder.create();
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(alert.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
             alert.show();
+            alert.getWindow().setAttributes(lp);
             AdView adView = (AdView) v.findViewById(R.id.banner_bottom);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);

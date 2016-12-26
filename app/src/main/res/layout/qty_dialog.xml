@@ -4,12 +4,12 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="false">
+    android:fillViewport="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/dialogTitle"
@@ -26,19 +26,65 @@
         <com.paocorp.mycoffeecapsules.models.NumberPicker
             android:id="@+id/qty"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_below="@+id/dialogTitle" />
+
+        <LinearLayout
+            android:id="@+id/plusBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/qty"
+            android:layout_marginTop="5sp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/zero"
+                android:layout_width="@dimen/plus_btn_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue"
+                android:onClick="zero"
+                android:text="@string/zero"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/plus10"
+                android:layout_width="@dimen/plus_btn_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue"
+                android:onClick="plus10"
+                android:text="@string/plus10"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/plus50"
+                android:layout_width="@dimen/plus_btn_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue"
+                android:onClick="plus50"
+                android:text="@string/plus50"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/plus100"
+                android:layout_width="@dimen/plus_btn_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_blue"
+                android:onClick="plus100"
+                android:text="@string/plus100"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/rel_banner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_below="@+id/qty">
+            android:layout_below="@+id/plusBtn"
+            android:layout_marginTop="5sp">
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/banner_bottom"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 ads:adSize="BANNER"

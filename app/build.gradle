@@ -7,7 +7,7 @@ android {
         applicationId "com.paocorp.mycoffeecapsules"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 7
+        versionCode 8
         versionName "1.4"
     }
     buildTypes {

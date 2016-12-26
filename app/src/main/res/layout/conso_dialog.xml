@@ -3,13 +3,13 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/consoTitle"
@@ -29,29 +29,29 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/consoTitle" />
 
-
         <TextView
             android:id="@+id/consoPreview"
-            android:layout_below="@+id/consoQty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/consoQty"
             android:gravity="center"
+            android:paddingBottom="5sp"
             android:paddingTop="10sp"
-            android:paddingBottom="10sp"
             android:textColor="@color/black"
             android:textSize="@dimen/normal_text_size"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rel_banner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5sp"
-            android:layout_below="@+id/consoPreview">
+            android:layout_below="@+id/consoPreview"
+            android:layout_marginTop="5sp">
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/banner_bottom"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 ads:adSize="BANNER"

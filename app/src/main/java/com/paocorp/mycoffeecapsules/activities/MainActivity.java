@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -150,6 +151,48 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    public void zero(View v) {
+        View convertView = (View) v.getParent().getParent();
+        final NumberPicker nb = (NumberPicker) convertView.findViewById(R.id.qty);
+        nb.getWrapSelectorWheel();
+        nb.setMinValue(0);
+        nb.setMaxValue(10000);
+        nb.setValue(0);
+    }
+
+    public void plus10(View v) {
+        View convertView = (View) v.getParent().getParent();
+        final NumberPicker nb = (NumberPicker) convertView.findViewById(R.id.qty);
+        nb.getWrapSelectorWheel();
+        nb.setMinValue(0);
+        nb.setMaxValue(10000);
+        if (nb.getValue() <= 10000 - 10) {
+            nb.setValue(nb.getValue() + 10);
+        }
+    }
+
+    public void plus50(View v) {
+        View convertView = (View) v.getParent().getParent();
+        final NumberPicker nb = (NumberPicker) convertView.findViewById(R.id.qty);
+        nb.getWrapSelectorWheel();
+        nb.setMinValue(0);
+        nb.setMaxValue(10000);
+        if (nb.getValue() <= 10000 - 50) {
+            nb.setValue(nb.getValue() + 50);
+        }
+    }
+
+    public void plus100(View v) {
+        View convertView = (View) v.getParent().getParent();
+        final NumberPicker nb = (NumberPicker) convertView.findViewById(R.id.qty);
+        nb.getWrapSelectorWheel();
+        nb.setMinValue(0);
+        nb.setMaxValue(10000);
+        if (nb.getValue() <= 10000 - 100) {
+            nb.setValue(nb.getValue() + 100);
         }
     }
 

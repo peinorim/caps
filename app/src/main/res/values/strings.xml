@@ -58,5 +58,9 @@
     <string name="violet">Purple</string>
     <string name="capColor">Capsule color :</string>
     <string name="brown">Brown</string>
+    <string name="zero" translatable="false">0</string>
+    <string name="plus10" translatable="false">+10</string>
+    <string name="plus50" translatable="false">+50</string>
+    <string name="plus100" translatable="false">+100</string>
 
 </resources>

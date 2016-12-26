@@ -182,16 +182,8 @@ public class CapsuleHelper extends DatabaseHelper {
                 file.createNewFile();
                 printWriter = new PrintWriter(new FileWriter(file));
 
-                /**This is our database connector class that reads the data from the database.
-                 * The code of this class is omitted for brevity.
-                 */
                 SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
 
-                /**Let's read the first table of the database.
-                 * getFirstTable() is a method in our DBCOurDatabaseConnector class which retrieves a Cursor
-                 * containing all records of the table (all fields).
-                 * The code of this class is omitted for brevity.
-                 */
                 Cursor curCSV = db.rawQuery("SELECT " + COLUMN_CAPSULE_NAME + "," + COLUMN_CAPSULE_QTY + "," + COLUMN_CAPSULE_CONSO
                         + ", capsule_type.capsule_type_name as type_name FROM " + TABLE_CAPSULE + ", " + TABLE_CAPSULE_TYPE + " WHERE capsules." + COLUMN_CAPSULE_TYPE + " = capsule_type." + COLUMN_CAPSULE_TYPE_ID + " ORDER BY " + COLUMN_CAPSULE_NAME + " ASC", null);
                 //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
@@ -205,25 +197,18 @@ public class CapsuleHelper extends DatabaseHelper {
                     int conso = curCSV.getInt(curCSV.getColumnIndex(COLUMN_CAPSULE_CONSO));
                     String type_name = stripAccents(curCSV.getString(curCSV.getColumnIndex("type_name")).replace(SEPARATOR, " "));
 
-                    /**Create the line to write in the .csv file.
-                     * We need a String where values are comma separated.
-                     * The field date (Long) is formatted in a readable text. The amount field
-                     * is converted into String.
-                     */
                     String record = name + SEPARATOR + qty + SEPARATOR + conso + SEPARATOR + type_name;
-                    printWriter.println(record); //write the record in the .csv file
+                    printWriter.println(record);
                 }
 
                 curCSV.close();
                 db.close();
             } catch (Exception exc) {
-                //if there are any exceptions, return false
                 return false;
             } finally {
                 if (printWriter != null) printWriter.close();
             }
 
-            //If there are no errors, return true.
             return true;
         }
     }
