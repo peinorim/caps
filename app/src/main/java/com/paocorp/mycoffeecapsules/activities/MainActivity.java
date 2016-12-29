@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -39,11 +41,16 @@ import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
 import com.paocorp.mycoffeecapsules.models.CapsuleType;
+import com.paocorp.mycoffeecapsules.models.Global;
 import com.paocorp.mycoffeecapsules.models.ShowAdsApplication;
-
+import com.paocorp.mycoffeecapsules.util.IabHelper;
+import com.paocorp.mycoffeecapsules.util.IabResult;
+import com.paocorp.mycoffeecapsules.util.Inventory;
+import com.paocorp.mycoffeecapsules.util.Purchase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +68,10 @@ public class MainActivity extends AppCompatActivity
     CapsuleTypeHelper capsuleTypeHelper;
     ArrayList<CapsuleType> listCapsuleType;
     NavigationView navigationView;
+    ShowAdsApplication hideAdObj;
+    IabHelper mHelper;
+    boolean mIsRemoveAdds = false;
+    String SKU_NOAD = "com.paocorp.mycoffeecapsules.noads";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +110,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        hideAdObj = ((ShowAdsApplication) getApplicationContext());
         expListView = (ExpandableListView) findViewById(R.id.first_list);
         listAdapter = new CapsuleExpandableListAdapter(this, types, listDataCapsules);
         // setting list adapter
@@ -117,20 +129,28 @@ public class MainActivity extends AppCompatActivity
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
 
-        final ShowAdsApplication hideAdObj = ((ShowAdsApplication) getApplicationContext());
-        boolean hideAd = hideAdObj.getHideAd();
+        String base64EncodedPublicKey = this.getResources().getString(R.string.billingKey);
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
 
-        if (!hideAd) {
-            mInterstitialAd.setAdUnitId(this.getResources().getString(R.string.interstitial));
-            requestNewInterstitial();
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    showInterstitial();
-                    hideAdObj.setHideAd(true);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    // Oh no, there was a problem.
+                    Log.d("BILLING-ISSUE", "Problem setting up In-app Billing: " + result);
+                    return;
                 }
-            });
-        }
+                if (result.isSuccess()) {
+                    try {
+                        List additionalSkuList = new ArrayList<>();
+                        additionalSkuList.add(SKU_NOAD);
+                        mHelper.queryInventoryAsync(true, additionalSkuList, additionalSkuList, mGotInventoryListener);
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     protected void requestNewInterstitial() {
@@ -352,6 +372,8 @@ public class MainActivity extends AppCompatActivity
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
+        } else if (id == R.id.nav_billing) {
+            intent = new Intent(this, BillingActivity.class);
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -362,6 +384,90 @@ public class MainActivity extends AppCompatActivity
         finish();
         startActivity(intent);
         return true;
+    }
+
+    private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        @Override
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            if (result.isFailure()) {
+                // handle error here
+                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_LONG).show();
+            } else {
+                mIsRemoveAdds = inventory.hasPurchase(SKU_NOAD);
+                Purchase purchase = inventory.getPurchase(SKU_NOAD);
+                hideAdObj = ((ShowAdsApplication) getApplicationContext());
+                if (!mIsRemoveAdds || (purchase != null && purchase.getPurchaseState() != 0)) {
+                    Global.isNoAdsPurchased = false;
+                    launchInterstitial();
+                } else {
+                    hideAdObj.setHideAd(true);
+                    Global.isNoAdsPurchased = true;
+                    Menu menu = navigationView.getMenu();
+                    MenuItem nav_billing = menu.findItem(R.id.nav_billing);
+                    nav_billing.setVisible(false);
+                }
+            }
+        }
+    };
+
+    private void launchInterstitial() {
+        final ShowAdsApplication hideAdObj = ((ShowAdsApplication) getApplicationContext());
+        boolean hideAd = hideAdObj.getHideAd();
+        mInterstitialAd = new InterstitialAd(this);
+
+        if (!hideAd || mIsRemoveAdds) {
+            mInterstitialAd.setAdUnitId(this.getResources().getString(R.string.interstitial));
+            requestNewInterstitial();
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    showInterstitial();
+                    hideAdObj.setHideAd(true);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) try {
+            mHelper.dispose();
+        } catch (IabHelper.IabAsyncInProgressException e) {
+            e.printStackTrace();
+        }
+        mHelper = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void queryPurchasedItems() {
+        //check if user has bought "remove adds"
+        if (mHelper.isSetupDone() && !mHelper.isAsyncInProgress()) {
+            try {
+                mHelper.queryInventoryAsync(mGotInventoryListener);
+            } catch (IabHelper.IabAsyncInProgressException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        queryPurchasedItems();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        queryPurchasedItems();
     }
 
 }

@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/consoPreview"
-            android:layout_marginTop="5sp">
+            android:layout_marginTop="10sp">
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/banner_bottom"

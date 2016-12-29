@@ -16,7 +16,7 @@
     <string name="rate_app">Rate this app</string>
     <string name="share">Share</string>
     <string name="share_fb">Share on Facebook</string>
-    <string name="fb_ContentDesc">I use this app to inventory my stock of coffee capsules.</string>
+    <string name="fb_ContentDesc">I use this app to inventory my coffee capsules.</string>
     <string name="search">Search a capsule</string>
     <string name="no_results">No results matching this request</string>
     <string name="order_url">https://www.nespresso.com/mobile/uk/en/catalog</string>
@@ -47,5 +47,11 @@
     <string name="brown">Brown</string>
     <string name="deleteTitle">Delete %1$s capsules</string>
     <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
+    <string name="purchase">Purchase</string>
+    <string name="endAds">Tired of ads ?</string>
+    <string name="purchaseNoAds">Make a one-time payment of %1$s</string>
+    <string name="noMoreAds">No more ads forever</string>
+    <string name="purchaseNotDone">Purchase not done</string>
+    <string name="purchaseError">Error while making the payment</string>
 
 </resources>

@@ -25,6 +25,7 @@ import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.db.DatabaseHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
+import com.paocorp.mycoffeecapsules.models.Global;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -160,7 +161,7 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
     private void createQtyDialog(final int groupPosition, final int childPosition, final int id, final View parent) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View v = inflater.inflate(R.layout.qty_dialog, null);
+        final View v = inflater.inflate(R.layout.dialog_qty, null);
         builder.setCancelable(true);
         final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
         final Capsule currentCapsule = capsuleHelper.getCapsuleById(id);
@@ -210,15 +211,19 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             alert.show();
             alert.getWindow().setAttributes(lp);
             adView = (AdView) v.findViewById(R.id.banner_bottom);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
+            if (!Global.isNoAdsPurchased) {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                adView.loadAd(adRequest);
+            } else {
+                adView.setVisibility(View.GONE);
+            }
         }
     }
 
     private void consoDialog(final View convertView, int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View v = inflater.inflate(R.layout.conso_dialog, null);
+        final View v = inflater.inflate(R.layout.dialog_conso, null);
         builder.setCancelable(true);
         final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
         final Capsule capsule = capsuleHelper.getCapsuleById(id);
@@ -269,16 +274,20 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
             alert.show();
             alert.getWindow().setAttributes(lp);
-            AdView adView = (AdView) v.findViewById(R.id.banner_bottom);
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
+            adView = (AdView) v.findViewById(R.id.banner_bottom);
+            if (!Global.isNoAdsPurchased) {
+                AdRequest adRequest = new AdRequest.Builder().build();
+                adView.loadAd(adRequest);
+            } else {
+                adView.setVisibility(View.GONE);
+            }
         }
     }
 
     private void deleteDialog(final int groupPosition, final int childPosition, int id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View v = inflater.inflate(R.layout.delete_dialog, null);
+        final View v = inflater.inflate(R.layout.dialog_delete, null);
         builder.setCancelable(true);
         final CapsuleHelper capsuleHelper = new CapsuleHelper(context);
         final Capsule capsule = capsuleHelper.getCapsuleById(id);

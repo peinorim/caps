@@ -5,6 +5,7 @@
     <!-- Include required permissions for Google Mobile Ads to run -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <supports-screens
         android:anyDensity="true"
@@ -57,6 +58,17 @@
         <activity
             android:name=".activities.AddActivity"
             android:label="@string/addCapsules"
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustResize|adjustPan"
+
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.BillingActivity"
+            android:label="@string/purchase"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize|adjustPan"
 

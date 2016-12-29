@@ -14,7 +14,7 @@
     <string name="order">Order Nespresso Capsules</string>
     <string name="share">Share</string>
     <string name="share_fb">Share on Facebook</string>
-    <string name="fb_ContentDesc">I use this app to inventory my stock of coffee scapsules</string>
+    <string name="fb_ContentDesc">I use this app to inventory my coffee capsules.</string>
 
     <string name="intenso">Intenso</string>
     <string name="espresso">Espresso</string>
@@ -63,4 +63,11 @@
     <string name="plus50" translatable="false">+50</string>
     <string name="plus100" translatable="false">+100</string>
 
+    <string name="billingKey" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtG+x0PNDk7CgvdyEUBt7DXy7VAUxa3HFFdhlh0AwL6RbLMm37vM7lDppFCRksKNU0Ag4Vah0Keybk73HgKjTnvI40ieJFB1P8osMoAyI96D76oHy+QvGq7mTxgImaN3gnUGBn2YTHbVpxt4jXDxftn8/+YvYHeNqY8KcA0Qg648IBizB8B7Z0U4aslzEw+T3JzwajIld2O1AAEiqRskC1uFr7W6lqUVJVq+wgFEOjeZARBWPXYvfh48WZ2DdflYeZMWJK4RoPXSkYj/P6cvx9Kq1tt0Iw3sjS3bQyUODtENl9yFV8lzyEMWN+PI/qJLyPwn0ZFNG/eO5AlRgA+qPlQIDAQAB</string>
+    <string name="purchase">Purchase</string>
+    <string name="endAds">Tired of ads ?</string>
+    <string name="purchaseNoAds">Make a one-time payment of %1$s</string>
+    <string name="noMoreAds">No more ads forever</string>
+    <string name="purchaseNotDone">Purchase not done</string>
+    <string name="purchaseError">Error while making the payment</string>
 </resources>
