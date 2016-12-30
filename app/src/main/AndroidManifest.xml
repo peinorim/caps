@@ -60,7 +60,6 @@
             android:label="@string/addCapsules"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize|adjustPan"
-
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -71,7 +70,6 @@
             android:label="@string/purchase"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize|adjustPan"
-
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
