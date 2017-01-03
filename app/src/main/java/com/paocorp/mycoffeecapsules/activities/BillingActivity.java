@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.paocorp.mycoffeecapsules.R;
+import com.paocorp.mycoffeecapsules.models.Global;
 import com.paocorp.mycoffeecapsules.util.IabHelper;
 import com.paocorp.mycoffeecapsules.util.IabResult;
 import com.paocorp.mycoffeecapsules.util.Inventory;
@@ -26,7 +27,7 @@ public class BillingActivity extends AppCompatActivity {
 
     IabHelper mHelper;
     boolean mIsRemoveAdds = false;
-    String SKU_NOAD = "com.paocorp.mycoffeecapsules.noads";
+    String SKU_NOAD = Global.SKU_NOAD;
     View parentLayout;
 
     @Override
@@ -136,11 +137,6 @@ public class BillingActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    try {
-                        mHelper.consumeAsync(inventory.getPurchase(SKU_NOAD), mConsumeFinishedListener);
-                    } catch (IabHelper.IabAsyncInProgressException e) {
-                        e.printStackTrace();
-                    }
                     RelativeLayout noAds = (RelativeLayout) BillingActivity.this.findViewById(R.id.noAds);
                     noAds.setVisibility(View.GONE);
                 }
@@ -153,7 +149,6 @@ public class BillingActivity extends AppCompatActivity {
             if (result.isFailure()) {
                 Snackbar.make(parentLayout, R.string.purchaseNotDone, Snackbar.LENGTH_LONG).show();
             } else if (purchase.getSku().equals(SKU_NOAD)) {
-                // consume the gas and update the UI
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -162,21 +157,6 @@ public class BillingActivity extends AppCompatActivity {
             }
         }
     };
-
-    public IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
-            new IabHelper.OnConsumeFinishedListener() {
-                public void onConsumeFinished(Purchase purchase, IabResult result) {
-                    if (result.isSuccess()) {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        finish();
-                        startActivity(intent);
-                    } else {
-                        Snackbar.make(parentLayout, R.string.purchaseError, Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            };
 
     @Override
     public void onDestroy() {

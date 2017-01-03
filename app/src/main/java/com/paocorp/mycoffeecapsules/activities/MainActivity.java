@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
     ShowAdsApplication hideAdObj;
     IabHelper mHelper;
     boolean mIsRemoveAdds = false;
-    String SKU_NOAD = "com.paocorp.mycoffeecapsules.noads";
+    String SKU_NOAD = Global.SKU_NOAD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity
         boolean hideAd = hideAdObj.getHideAd();
         mInterstitialAd = new InterstitialAd(this);
 
-        if (!hideAd || mIsRemoveAdds) {
+        if (!hideAd && !mIsRemoveAdds) {
             mInterstitialAd.setAdUnitId(this.getResources().getString(R.string.interstitial));
             requestNewInterstitial();
             mInterstitialAd.setAdListener(new AdListener() {
