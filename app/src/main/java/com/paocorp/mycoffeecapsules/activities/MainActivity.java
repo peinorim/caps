@@ -110,24 +110,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        hideAdObj = ((ShowAdsApplication) getApplicationContext());
         expListView = (ExpandableListView) findViewById(R.id.first_list);
         listAdapter = new CapsuleExpandableListAdapter(this, types, listDataCapsules);
         // setting list adapter
         expListView.setAdapter(listAdapter);
-
-        try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            TextView txv = (TextView) findViewById(R.id.appVersion);
-            String APPINFO = txv.getText() + " v" + pInfo.versionName;
-            txv.setText(APPINFO);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        shareDialog = new ShareDialog(this);
 
         String base64EncodedPublicKey = this.getResources().getString(R.string.billingKey);
         mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -151,6 +137,21 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        hideAdObj = ((ShowAdsApplication) getApplicationContext());
+
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            TextView txv = (TextView) findViewById(R.id.appVersion);
+            String APPINFO = txv.getText() + " v" + pInfo.versionName;
+            txv.setText(APPINFO);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
     }
 
     protected void requestNewInterstitial() {
@@ -391,14 +392,17 @@ public class MainActivity extends AppCompatActivity
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             if (result.isFailure()) {
                 // handle error here
-                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, "error", Toast.LENGTH_LONG).show();
             } else {
                 mIsRemoveAdds = inventory.hasPurchase(SKU_NOAD);
                 Purchase purchase = inventory.getPurchase(SKU_NOAD);
                 hideAdObj = ((ShowAdsApplication) getApplicationContext());
                 if (!mIsRemoveAdds || (purchase != null && purchase.getPurchaseState() != 0)) {
                     Global.isNoAdsPurchased = false;
-                    launchInterstitial();
+                    if (!hideAdObj.getHideAd()) {
+                        launchInterstitial();
+                        hideAdObj.setHideAd(true);
+                    }
                 } else {
                     hideAdObj.setHideAd(true);
                     Global.isNoAdsPurchased = true;
@@ -411,7 +415,7 @@ public class MainActivity extends AppCompatActivity
     };
 
     private void launchInterstitial() {
-        final ShowAdsApplication hideAdObj = ((ShowAdsApplication) getApplicationContext());
+        hideAdObj = ((ShowAdsApplication) getApplicationContext());
         boolean hideAd = hideAdObj.getHideAd();
         mInterstitialAd = new InterstitialAd(this);
 
