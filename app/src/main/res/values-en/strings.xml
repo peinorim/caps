@@ -47,12 +47,5 @@
     <string name="brown">Brown</string>
     <string name="deleteTitle">Delete %1$s capsules</string>
     <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
-    <string name="purchase">Purchase</string>
-    <string name="endAds">Tired of ads ?</string>
-    <string name="purchaseNoAds">Make a one-time payment of %1$s</string>
-    <string name="noMoreAds">No more ads forever</string>
-    <string name="purchaseNotDone">Purchase not done</string>
-    <string name="purchaseError">Error while making the payment</string>
-    <string name="purchaseThx">Thanks for your purchase</string>
 
 </resources>

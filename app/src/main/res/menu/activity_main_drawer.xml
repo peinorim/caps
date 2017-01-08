@@ -10,8 +10,6 @@
             android:title="@string/order" />
         <item android:id="@+id/nav_rate" android:icon="@drawable/ic_star_black_24dp"
             android:title="@string/rate_app" />
-        <item android:id="@+id/nav_billing" android:icon="@drawable/ic_money_off_black_24dp"
-            android:title="@string/endAds" />
     </group>
 
     <item android:title="@string/share">

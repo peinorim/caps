@@ -15,8 +15,7 @@
         <ImageView
             android:id="@+id/capsuleimg"
             android:layout_width="70sp"
-            android:layout_height="70sp"
-            android:background="@drawable/arpeggio" />
+            android:layout_height="70sp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"

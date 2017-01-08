@@ -47,12 +47,5 @@
     <string name="brown">Marron</string>
     <string name="deleteTitle">Supprimer capsules de %1$s</string>
     <string name="deleteInfo">Etes-vous sûr de supprimer cette capsule ?\n Cette action est irréversible.</string>
-    <string name="purchase">Achats</string>
-    <string name="endAds">Marre des publicités ?</string>
-    <string name="purchaseNoAds">Faire un paiement unique de %1$s</string>
-    <string name="noMoreAds">Ne plus avoir de publicités définitivement</string>
-    <string name="purchaseNotDone">Achat non effectué</string>
-    <string name="purchaseError">Erreur durant le paiement</string>
-    <string name="purchaseThx">Merci de votre achat</string>
 
 </resources>

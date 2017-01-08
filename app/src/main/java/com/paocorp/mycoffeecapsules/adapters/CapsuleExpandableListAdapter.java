@@ -25,7 +25,6 @@ import com.paocorp.mycoffeecapsules.R;
 import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
 import com.paocorp.mycoffeecapsules.db.DatabaseHelper;
 import com.paocorp.mycoffeecapsules.models.Capsule;
-import com.paocorp.mycoffeecapsules.models.Global;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -211,12 +210,8 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             alert.show();
             alert.getWindow().setAttributes(lp);
             adView = (AdView) v.findViewById(R.id.banner_bottom);
-            if (!Global.isNoAdsPurchased) {
-                AdRequest adRequest = new AdRequest.Builder().build();
-                adView.loadAd(adRequest);
-            } else {
-                adView.setVisibility(View.GONE);
-            }
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
         }
     }
 
@@ -275,12 +270,9 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             alert.show();
             alert.getWindow().setAttributes(lp);
             adView = (AdView) v.findViewById(R.id.banner_bottom);
-            if (!Global.isNoAdsPurchased) {
-                AdRequest adRequest = new AdRequest.Builder().build();
-                adView.loadAd(adRequest);
-            } else {
-                adView.setVisibility(View.GONE);
-            }
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+
         }
     }
 
