@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -300,6 +300,8 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_rate) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url)));
+        } else if (id == R.id.nav_pro) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url_pro)));
         } else if (id == R.id.nav_order) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.order_url)));
         } else if (id == R.id.nav_add) {

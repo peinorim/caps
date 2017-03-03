@@ -28,8 +28,9 @@
     <string name="interstitial" translatable="false">ca-app-pub-2669557761715669/1242375637</string>
     <string name="bann" translatable="false">ca-app-pub-2669557761715669/4195842034</string>
     <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.paocorp.mycoffeecapsules</string>
+    <string name="store_url_pro" translatable="false">https://play.google.com/store/apps/details?id=com.paocorp.mycoffeecapsulespro</string>
     <string name="site_url" translatable="false">paocorp.com</string>
-    <string name="order_url">https://www.nespresso.com/mobile/uk/en/catalog</string>
+    <string name="order_url">https://www.nespresso.com/mobile/catalog</string>
     <string name="facebook_app_id" translatable="false">914409908597657</string>
     <string name="app_icon_url" translatable="false">https://paocorp.com/res/images/ico/mycoffeecapsules.png</string>
     <string name="banner_bottom" translatable="false">ca-app-pub-2669557761715669/4195842034</string>
@@ -62,5 +63,6 @@
     <string name="plus10" translatable="false">+10</string>
     <string name="plus50" translatable="false">+50</string>
     <string name="plus100" translatable="false">+100</string>
+    <string name="gopro">Upgrade to PRO</string>
 
 </resources>

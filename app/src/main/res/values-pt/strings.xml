@@ -47,4 +47,5 @@
     <string name="brown">Marrom</string>
     <string name="deleteInfo">Tem certeza que deseja remover esta cápsula?\n Esta ação é irreversível.</string>
     <string name="deleteTitle">Remover cápsulas de %1$s</string>
+    <string name="gopro">Atualizar para PRO</string>
 </resources>
