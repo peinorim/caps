@@ -300,8 +300,6 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_rate) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url)));
-        } else if (id == R.id.nav_pro) {
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.store_url_pro)));
         } else if (id == R.id.nav_order) {
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.order_url)));
         } else if (id == R.id.nav_add) {

@@ -47,6 +47,5 @@
     <string name="brown">Brown</string>
     <string name="deleteTitle">Delete %1$s capsules</string>
     <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
-    <string name="gopro">Upgrade to PRO</string>
 
 </resources>
