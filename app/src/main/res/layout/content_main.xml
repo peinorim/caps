@@ -10,7 +10,7 @@
     android:paddingRight="5sp"
     android:paddingTop="0sp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.paocorp.mycoffeecapsules.activities.MainActivity"
+    tools:context="com.merilonstudio.mycoffeecapsulesinventory.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <include layout="@layout/first_list" />

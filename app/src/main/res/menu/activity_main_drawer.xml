@@ -16,6 +16,8 @@
         <menu>
             <item android:id="@+id/nav_share" android:icon="@drawable/com_facebook_button_icon"
                 android:title="@string/share_fb" />
+            <item android:id="@+id/nav_tw" android:icon="@drawable/twitter"
+                android:title="@string/share_tw" />
         </menu>
     </item>
 

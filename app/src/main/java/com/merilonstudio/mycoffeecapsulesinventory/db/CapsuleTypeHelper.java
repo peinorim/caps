@@ -1,10 +1,10 @@
-package com.paocorp.mycoffeecapsules.db;
+package com.merilonstudio.mycoffeecapsulesinventory.db;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.paocorp.mycoffeecapsules.models.CapsuleType;
+import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
 
 import java.util.ArrayList;
 

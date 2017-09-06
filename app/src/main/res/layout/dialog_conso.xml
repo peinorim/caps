@@ -23,7 +23,7 @@
             android:textSize="@dimen/title_text_size"
             android:textStyle="bold" />
 
-        <com.paocorp.mycoffeecapsules.models.NumberPicker
+        <com.merilonstudio.mycoffeecapsulesinventory.models.NumberPicker
             android:id="@+id/consoQty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_bottom" />
+                ads:adUnitId="@string/bann" />
         </RelativeLayout>
 
     </RelativeLayout>

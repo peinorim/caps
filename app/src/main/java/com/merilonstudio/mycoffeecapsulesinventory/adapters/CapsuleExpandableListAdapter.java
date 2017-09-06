@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.adapters;
+package com.merilonstudio.mycoffeecapsulesinventory.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,10 +21,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.paocorp.mycoffeecapsules.R;
-import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
-import com.paocorp.mycoffeecapsules.db.DatabaseHelper;
-import com.paocorp.mycoffeecapsules.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.db.DatabaseHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

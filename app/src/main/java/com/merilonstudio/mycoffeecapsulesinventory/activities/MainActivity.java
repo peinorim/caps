@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.activities;
+package com.merilonstudio.mycoffeecapsulesinventory.activities;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -36,13 +36,13 @@ import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.paocorp.mycoffeecapsules.R;
-import com.paocorp.mycoffeecapsules.adapters.CapsuleExpandableListAdapter;
-import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
-import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
-import com.paocorp.mycoffeecapsules.models.Capsule;
-import com.paocorp.mycoffeecapsules.models.CapsuleType;
-import com.paocorp.mycoffeecapsules.models.ShowAdsApplication;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
+import com.merilonstudio.mycoffeecapsulesinventory.adapters.CapsuleExpandableListAdapter;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleTypeHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
+import com.merilonstudio.mycoffeecapsulesinventory.models.ShowAdsApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -309,6 +309,8 @@ public class MainActivity extends AppCompatActivity
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
+        } else if (id == R.id.nav_tw) {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.twitter.com/intent/tweet?url=" + getResources().getString(R.string.store_url) + "&text=" + getResources().getString(R.string.fb_ContentDesc)));
         }
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

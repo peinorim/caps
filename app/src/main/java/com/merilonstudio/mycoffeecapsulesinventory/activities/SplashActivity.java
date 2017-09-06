@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.activities;
+package com.merilonstudio.mycoffeecapsulesinventory.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.paocorp.mycoffeecapsules.R;
-import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
-import com.paocorp.mycoffeecapsules.db.CapsuleTypeHelper;
-import com.paocorp.mycoffeecapsules.db.DatabaseHelper;
-import com.paocorp.mycoffeecapsules.models.Capsule;
-import com.paocorp.mycoffeecapsules.models.CapsuleType;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleTypeHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.db.DatabaseHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

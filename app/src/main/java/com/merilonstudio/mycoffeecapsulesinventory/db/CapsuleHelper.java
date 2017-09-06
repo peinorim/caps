@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.db;
+package com.merilonstudio.mycoffeecapsulesinventory.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Environment;
 
-import com.paocorp.mycoffeecapsules.R;
-import com.paocorp.mycoffeecapsules.models.Capsule;
-import com.paocorp.mycoffeecapsules.models.CapsuleType;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
 
 import java.io.File;
 import java.io.FileWriter;

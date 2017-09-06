@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.activities;
+package com.merilonstudio.mycoffeecapsulesinventory.activities;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -12,9 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.paocorp.mycoffeecapsules.R;
-import com.paocorp.mycoffeecapsules.db.CapsuleHelper;
-import com.paocorp.mycoffeecapsules.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
+import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
 
 
 public class AddActivity extends AppCompatActivity {

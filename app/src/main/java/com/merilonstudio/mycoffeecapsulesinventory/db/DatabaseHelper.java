@@ -1,10 +1,10 @@
-package com.paocorp.mycoffeecapsules.db;
+package com.merilonstudio.mycoffeecapsulesinventory.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.paocorp.mycoffeecapsules.R;
+import com.merilonstudio.mycoffeecapsulesinventory.R;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

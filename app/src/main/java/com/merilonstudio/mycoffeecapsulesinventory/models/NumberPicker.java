@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.models;
+package com.merilonstudio.mycoffeecapsulesinventory.models;
 
 import android.content.Context;
 import android.graphics.Color;

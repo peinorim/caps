@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">My Coffee Capsules</string>
+    <string name="app_name">My Coffee Capsules\nInventory</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
-    <string name="data_imported" translatable="false">com.paocorp.mycoffeecapsules.mhImportedData</string>
+    <string name="data_imported" translatable="false">com.merilonstudio.mycoffeecapsulesinventory.mhImportedData</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules in stock</string>
@@ -14,6 +14,7 @@
     <string name="order">Order Nespresso Capsules</string>
     <string name="share">Share</string>
     <string name="share_fb">Share on Facebook</string>
+    <string name="share_tw">Share on Twitter</string>
     <string name="fb_ContentDesc">I use this app to inventory my coffee capsules.</string>
 
     <string name="intenso">Intenso</string>
@@ -25,15 +26,13 @@
     <string name="variations_limited">Variations Limited Edition</string>
     <string name="search">Search a capsule</string>
 
-    <string name="interstitial" translatable="false">ca-app-pub-2669557761715669/1242375637</string>
-    <string name="bann" translatable="false">ca-app-pub-2669557761715669/4195842034</string>
-    <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.paocorp.mycoffeecapsules</string>
-    <string name="store_url_pro" translatable="false">https://play.google.com/store/apps/details?id=com.paocorp.mycoffeecapsulespro</string>
-    <string name="site_url" translatable="false">paocorp.com</string>
-    <string name="order_url">https://www.nespresso.com/mobile/catalog</string>
-    <string name="facebook_app_id" translatable="false">914409908597657</string>
-    <string name="app_icon_url" translatable="false">https://paocorp.com/res/images/ico/mycoffeecapsules.png</string>
-    <string name="banner_bottom" translatable="false">ca-app-pub-2669557761715669/4195842034</string>
+    <string name="interstitial" translatable="false">ca-app-pub-9605677164645933/1998126273</string>
+    <string name="bann" translatable="false">ca-app-pub-9605677164645933/6650196468</string>
+    <string name="store_url" translatable="false">https://play.google.com/store/apps/details?id=com.merilonstudio.mycoffeecapsulesinventory</string>
+    <string name="site_url" translatable="false">merilonstudio.github.io</string>
+    <string name="order_url">https://www.nespresso.com/mobile/uk/en/catalog</string>
+    <string name="facebook_app_id" translatable="false">1587887927962889</string>
+    <string name="app_icon_url" translatable="false">https://merilonstudio.github.io/img/mycoffeecapsules.png</string>
     <string name="no_results">No results matching this request</string>
     <string name="daily_conso">Daily consumption of %1$s</string>
     <string name="consoPreview">You will run out of %1$s around %2$s</string>

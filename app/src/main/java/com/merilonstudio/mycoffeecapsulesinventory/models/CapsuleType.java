@@ -1,4 +1,4 @@
-package com.paocorp.mycoffeecapsules.models;
+package com.merilonstudio.mycoffeecapsulesinventory.models;
 
 public class CapsuleType {
 

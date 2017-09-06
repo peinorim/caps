@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.paocorp.mycoffeecapsules"
+        applicationId "com.merilonstudio.mycoffeecapsulesinventory"
         minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 21
-        versionName "1.4.4"
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -20,9 +20,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.google.android.gms:play-services-ads:10.2.1'
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'com.facebook.android:facebook-android-sdk:4.19.0'
 }
