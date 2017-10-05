@@ -128,7 +128,7 @@ public class CapsuleHelper extends DatabaseHelper {
     }
 
     public ArrayList<Capsule> getSearchCapsules(CapsuleType type, String query) {
-        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase() + "%'";
+        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase().replace("'","''") + "%' COLLATE NOCASE";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         ArrayList<Capsule> allCapsules = new ArrayList<Capsule>();
