@@ -3,6 +3,8 @@ package com.merilonstudio.mycoffeecapsulesinventory.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -101,6 +103,14 @@ public class SplashActivity extends AppCompatActivity implements NavigationView.
             startActivity(intent);
             finish();
         }
+
+        boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
 
     }
 }

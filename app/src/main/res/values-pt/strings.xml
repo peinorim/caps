@@ -48,4 +48,13 @@
     <string name="deleteInfo">Tem certeza que deseja remover esta cápsula?\n Esta ação é irreversível.</string>
     <string name="deleteTitle">Remover cápsulas de %1$s</string>
     <string name="share_tw">Compartilhar no Twitter</string>
+    <string name="authFailed">Autenticação falhou …</string>
+    <string name="dialogAuthTitle">O backup online encontrado!</string>
+    <string name="dialog_auth">Um backup de seu inventário foi encontrado on-line, você gostaria de importar esses dados ?</string>
+    <string name="dialog_auth2">NB: se você disser que sim, o aplicativo será reiniciado.</string>
+    <string name="importNOK">A importação de dados falhou, tente mais tarde.</string>
+    <string name="importOK">Os dados foram importados corretamente!</string>
+    <string name="loggedin">Logado como :  %1$s</string>
+    <string name="no">Não</string>
+    <string name="yes">Sim</string>
 </resources>

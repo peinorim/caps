@@ -4,6 +4,7 @@
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
     <string name="data_imported" translatable="false">com.merilonstudio.mycoffeecapsulesinventory.mhImportedData</string>
+    <string name="versionDBFirebase" formatted="false" translatable="false">com.merilonstudio.mycoffeecapsulesinventory.dbversion</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_confirm">Confirm</string>
     <string name="capsulesQty">%1$d capsules in stock</string>
@@ -62,5 +63,14 @@
     <string name="plus10" translatable="false">+10</string>
     <string name="plus50" translatable="false">+50</string>
     <string name="plus100" translatable="false">+100</string>
+    <string name="authFailed">Authentification failed…</string>
+    <string name="loggedin">Logged in as : %1$s</string>
+    <string name="importOK">Data imported correctly !</string>
+    <string name="importNOK">Data importation failed, please try later.</string>
+    <string name="dialogAuthTitle">Online backup found !</string>
+    <string name="dialog_auth">A backup of your inventory has been found online, would you like to import this data ?</string>
+    <string name="dialog_auth2">NB: if you say yes, the application will reboot.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

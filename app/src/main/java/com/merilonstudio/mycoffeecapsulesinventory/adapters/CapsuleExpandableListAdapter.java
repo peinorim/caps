@@ -2,10 +2,12 @@ package com.merilonstudio.mycoffeecapsulesinventory.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -21,10 +23,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.auth.FirebaseUser;
 import com.merilonstudio.mycoffeecapsulesinventory.R;
 import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
 import com.merilonstudio.mycoffeecapsulesinventory.db.DatabaseHelper;
 import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.models.DBSave;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Global;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -186,6 +191,10 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                                 test.setQty(qty);
                                 notifyDataSetChanged();
                                 majAlertConso(parent, currentCapsule);
+
+                                if (Global.mAuth != null) {
+                                    saveToFirebase();
+                                }
                             }
                         }
                     })
@@ -254,6 +263,9 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                             capsule.setConso(conso);
                             capsuleHelper.updateCapsule(capsule);
                             majAlertConso(convertView, capsule);
+                            if (Global.mAuth != null) {
+                                saveToFirebase();
+                            }
                         }
                     })
                     .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
@@ -298,6 +310,9 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
                                 listDataHeader.remove(groupPosition);
                             }
                             notifyDataSetChanged();
+                            if (Global.mAuth != null) {
+                                saveToFirebase();
+                            }
                         }
                     })
                     .setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
@@ -335,6 +350,28 @@ public class CapsuleExpandableListAdapter extends BaseExpandableListAdapter {
             Drawable wrapDrawable = DrawableCompat.wrap(btnConso.getBackground());
             DrawableCompat.setTint(wrapDrawable, context.getResources().getColor(color));
             btnConso.setBackgroundDrawable(DrawableCompat.unwrap(wrapDrawable));
+        }
+    }
+
+    private void saveToFirebase() {
+        FirebaseUser user = Global.mAuth.getCurrentUser();
+        CapsuleHelper capsuleHelper = new CapsuleHelper(context);
+
+        if (user != null && !user.getUid().isEmpty() && capsuleHelper.exportDbToJson() && !Global.backupVal.isEmpty()) {
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = settings.edit();
+            final String settingVersion = context.getResources().getString(R.string.versionDBFirebase);
+            int versionDBSaved = settings.getInt(settingVersion, 1) + 1;
+
+            editor.putInt(settingVersion, versionDBSaved);
+            editor.apply();
+
+            DBSave dbSave = new DBSave();
+            dbSave.setContent(Global.backupVal);
+            dbSave.setVersion(versionDBSaved);
+
+            Global.mDatabase.child("caps").child(user.getUid()).setValue(dbSave);
         }
     }
 

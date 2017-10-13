@@ -48,5 +48,14 @@
     <string name="deleteTitle">Delete %1$s capsules</string>
     <string name="deleteInfo">Are you sure you want to delete this capsule ?\n This action cannot be undone.</string>
     <string name="share_tw">Share on Twitter</string>
+    <string name="authFailed">Authentification failed…</string>
+    <string name="loggedin">Logged in as : %1$s</string>
+    <string name="importOK">Data imported correctly !</string>
+    <string name="importNOK">Data importation failed, please try later.</string>
+    <string name="dialogAuthTitle">Online backup found !</string>
+    <string name="dialog_auth">A backup of your inventory has been found online, would you like to import this data ?</string>
+    <string name="dialog_auth2">NB: if you say yes, the application will reboot.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>

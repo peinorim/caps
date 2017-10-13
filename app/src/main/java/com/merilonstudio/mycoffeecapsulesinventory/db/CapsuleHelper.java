@@ -11,9 +11,16 @@ import android.os.Environment;
 import com.merilonstudio.mycoffeecapsulesinventory.R;
 import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
 import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
+import com.merilonstudio.mycoffeecapsulesinventory.models.DBSave;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Global;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
@@ -106,6 +113,27 @@ public class CapsuleHelper extends DatabaseHelper {
         return 0;
     }
 
+    public long insertCapsule(Capsule capsule) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CAPSULE_NAME, capsule.getName());
+        values.put(COLUMN_CAPSULE_IMG, capsule.getImg());
+        values.put(COLUMN_CAPSULE_QTY, capsule.getQty());
+        values.put(COLUMN_CAPSULE_CONSO, capsule.getConso());
+        values.put(COLUMN_CAPSULE_NOTIF, capsule.getNotif());
+        values.put(COLUMN_CAPSULE_TYPE, capsule.getType());
+
+        try {
+            if (!capsule.getName().trim().isEmpty()) {
+                return db.insert(TABLE_CAPSULE, null, values);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public long insertCustomCapsule(Capsule capsule) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -115,7 +143,7 @@ public class CapsuleHelper extends DatabaseHelper {
         values.put(COLUMN_CAPSULE_QTY, capsule.getQty());
         values.put(COLUMN_CAPSULE_CONSO, capsule.getConso());
         values.put(COLUMN_CAPSULE_NOTIF, capsule.getNotif());
-        values.put(COLUMN_CAPSULE_TYPE, "8");
+        values.put(COLUMN_CAPSULE_TYPE, DatabaseHelper.CUSTOM_TYPE_ID);
 
         try {
             if (!capsule.getName().trim().isEmpty()) {
@@ -128,7 +156,8 @@ public class CapsuleHelper extends DatabaseHelper {
     }
 
     public ArrayList<Capsule> getSearchCapsules(CapsuleType type, String query) {
-        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase().replace("'","''") + "%' COLLATE NOCASE";
+
+        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE + " WHERE " + COLUMN_CAPSULE_TYPE + " = " + type.getId() + " AND LOWER(" + COLUMN_CAPSULE_NAME + ") LIKE '%" + query.toLowerCase().replaceAll("'", "''") + "%' COLLATE NOCASE";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         ArrayList<Capsule> allCapsules = new ArrayList<Capsule>();
@@ -209,8 +238,99 @@ public class CapsuleHelper extends DatabaseHelper {
                 if (printWriter != null) printWriter.close();
             }
 
+            return file.exists();
+        }
+    }
+
+    public boolean exportDbToJson() {
+
+        String selectQuery = "SELECT * FROM " + TABLE_CAPSULE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        JSONObject allCaps = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Capsule capsule = new Capsule();
+                capsule.setId(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_ID)));
+                capsule.setName(c.getString(c.getColumnIndex(COLUMN_CAPSULE_NAME)));
+                capsule.setQty(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_QTY)));
+                capsule.setImg(c.getString(c.getColumnIndex(COLUMN_CAPSULE_IMG)));
+                capsule.setConso(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_CONSO)));
+                capsule.setNotif(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_NOTIF)));
+                capsule.setType(c.getInt(c.getColumnIndex(COLUMN_CAPSULE_TYPE)));
+
+                JSONObject capsuleJson = new JSONObject();
+                try {
+                    capsuleJson.put("id", capsule.getId());
+                    capsuleJson.put("name", capsule.getName());
+                    capsuleJson.put("qty", capsule.getQty());
+                    capsuleJson.put("img", capsule.getImg());
+                    capsuleJson.put("conso", capsule.getConso());
+                    capsuleJson.put("notif", capsule.getNotif());
+                    capsuleJson.put("type", capsule.getType());
+
+                    jsonArray.put(capsuleJson);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } while (c.moveToNext());
+
+            try {
+                allCaps.put("capsules", jsonArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        c.close();
+
+        if (jsonArray.length() > 0) {
+            Global.backupVal = allCaps.toString();
             return true;
         }
+        Global.backupVal = "";
+
+        return false;
+
+    }
+
+    public boolean importDBFromFirebase(DBSave dbSave) {
+        try {
+
+            JSONObject obj = new JSONObject(dbSave.getContent());
+            JSONArray capsules = obj.getJSONArray("capsules");
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DELETE FROM capsules");
+
+            for (int i = 0; i < capsules.length(); i++) {
+                JSONObject cap = (JSONObject) capsules.get(i);
+                Capsule capsule = new Capsule();
+                capsule.setId((int) cap.get("id"));
+                capsule.setName((String) cap.get("name"));
+                capsule.setQty((int) cap.get("qty"));
+                capsule.setImg((String) cap.get("img"));
+                capsule.setConso((int) cap.get("conso"));
+                if (cap.get("notif").toString().equalsIgnoreCase("true")) {
+                    capsule.setNotif(1);
+                } else {
+                    capsule.setNotif(0);
+                }
+                capsule.setType((int) cap.get("type"));
+
+                if (capsule.getId() > 0) {
+                    insertCapsule(capsule);
+                }
+            }
+            db.close();
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private String stripAccents(String s) {

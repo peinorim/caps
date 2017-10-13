@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "32025525617",
+    "firebase_url": "https://coffee-capsules-50775.firebaseio.com",
+    "project_id": "coffee-capsules-50775",
+    "storage_bucket": "coffee-capsules-50775.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32025525617:android:bcdf55698f433feb",
+        "android_client_info": {
+          "package_name": "com.merilonstudio.mycoffeecapsulesinventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32025525617-0qaud5egvj3q1ufamojjm3poa948uurg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlWk55W64dodNKO_xRVX1DQK-SSqh6pBY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

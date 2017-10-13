@@ -3,20 +3,27 @@ package com.merilonstudio.mycoffeecapsulesinventory.activities;
 import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +31,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -36,15 +45,35 @@ import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.merilonstudio.mycoffeecapsulesinventory.R;
 import com.merilonstudio.mycoffeecapsulesinventory.adapters.CapsuleExpandableListAdapter;
 import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
 import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleTypeHelper;
 import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
 import com.merilonstudio.mycoffeecapsulesinventory.models.CapsuleType;
-import com.merilonstudio.mycoffeecapsulesinventory.models.ShowAdsApplication;
+import com.merilonstudio.mycoffeecapsulesinventory.models.DBSave;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Global;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
@@ -63,8 +92,10 @@ public class MainActivity extends AppCompatActivity
     CapsuleTypeHelper capsuleTypeHelper;
     ArrayList<CapsuleType> listCapsuleType;
     NavigationView navigationView;
-    ShowAdsApplication hideAdObj;
     static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 31415;
+
+    GoogleApiClient mGoogleApiClient;
+    SignInButton signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +139,6 @@ public class MainActivity extends AppCompatActivity
         // setting list adapter
         expListView.setAdapter(listAdapter);
 
-        hideAdObj = ((ShowAdsApplication) getApplicationContext());
-
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             TextView txv = (TextView) findViewById(R.id.appVersion);
@@ -119,13 +148,185 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
         FacebookSdk.setApplicationId(getResources().getString(R.string.facebook_app_id));
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
 
-        launchInterstitial();
+        Global.mDatabase = FirebaseDatabase.getInstance().getReference();
+        Global.mAuth = FirebaseAuth.getInstance();
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+
+        if (Global.mAuth.getCurrentUser() != null) {
+
+            signInButton.setVisibility(View.GONE);
+
+            Snackbar snackbar = Snackbar.make(navigationView, getResources().getString(R.string.loggedin, Global.mAuth.getCurrentUser().getEmail()), Snackbar.LENGTH_LONG);
+            snackbar.show();
+
+        } else {
+            signInButton.setSize(SignInButton.SIZE_STANDARD);
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signIn();
+                }
+            });
+        }
+
+        if (Global.adDate == null) {
+            Global.adDate = new Date();
+            launchInterstitial();
+        } else {
+            Date currentDate = new Date();
+            if (isNetworkAvailable() && currentDate.getTime() - Global.adDate.getTime() > 60000 * 5) {
+                launchInterstitial();
+            }
+        }
+
+
     }
+
+    private void signIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .requestId()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                //.enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, 31416);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 31416) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            firebaseAuthWithGoogle(acct);
+        } else {
+            // Signed out, show unauthenticated UI.
+            signInButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        Global.mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            signInButton.setVisibility(View.GONE);
+                            checkDB();
+                        } else {
+                            Snackbar snackbar = Snackbar.make(navigationView, getResources().getString(R.string.authFailed), Snackbar.LENGTH_SHORT);
+                            snackbar.show();
+                        }
+                    }
+                });
+
+    }
+
+    private void checkDB() {
+        DatabaseReference ref = Global.mDatabase.child("caps").child(Global.mAuth.getCurrentUser().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DBSave dbSave = dataSnapshot.getValue(DBSave.class);
+
+                final String settingVersion = getResources().getString(R.string.versionDBFirebase);
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                int versionDBSaved = settings.getInt(settingVersion, 1);
+
+                if (dbSave != null && !dbSave.getContent().isEmpty() && dbSave.getVersion() > versionDBSaved) {
+                    importDBDialog(dbSave);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Snackbar snackbar = Snackbar.make(navigationView, getResources().getString(R.string.importNOK), Snackbar.LENGTH_LONG);
+                snackbar.show();
+            }
+        });
+    }
+
+    private void importDBDialog(final DBSave dbSave) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(getBaseContext());
+        final View v = inflater.inflate(R.layout.dialog_importdb, null);
+        builder.setCancelable(false);
+
+        builder.setView(v)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (capsuleHelper.importDBFromFirebase(dbSave)) {
+
+                            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                            SharedPreferences.Editor editor = settings.edit();
+                            final String settingVersion = v.getContext().getResources().getString(R.string.versionDBFirebase);
+                            editor.putInt(settingVersion, dbSave.getVersion());
+                            editor.apply();
+
+                            Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                            finish();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog alert = builder.create();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(alert.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        alert.show();
+        alert.getWindow().setAttributes(lp);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (Global.adDate == null) {
+            Global.adDate = new Date();
+            launchInterstitial();
+        } else {
+            Date currentDate = new Date();
+            if (isNetworkAvailable() && currentDate.getTime() - Global.adDate.getTime() > 60000 * 5) {
+                Global.adDate = new Date();
+                launchInterstitial();
+            }
+        }
+    }
+
+    boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 
     protected void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -324,21 +525,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void launchInterstitial() {
-        hideAdObj = ((ShowAdsApplication) getApplicationContext());
-        boolean hideAd = hideAdObj.getHideAd();
-        mInterstitialAd = new InterstitialAd(this);
-
-        if (!hideAd) {
-            mInterstitialAd.setAdUnitId(this.getResources().getString(R.string.interstitial));
-            requestNewInterstitial();
-            mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    showInterstitial();
-                    hideAdObj.setHideAd(true);
-                }
-            });
-        }
+        mInterstitialAd.setAdUnitId(this.getResources().getString(R.string.interstitial));
+        requestNewInterstitial();
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                showInterstitial();
+            }
+        });
     }
 
     private void exportData() {

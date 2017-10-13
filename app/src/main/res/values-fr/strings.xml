@@ -48,5 +48,14 @@
     <string name="deleteTitle">Supprimer capsules de %1$s</string>
     <string name="deleteInfo">Etes-vous sûr de supprimer cette capsule ?\n Cette action est irréversible.</string>
     <string name="share_tw">Partager sur Twitter</string>
+    <string name="authFailed">Authentification échouée…</string>
+    <string name="dialogAuthTitle">Une sauvegarde a été trouvée sur votre compte</string>
+    <string name="dialog_auth">Une sauvegarde de votre inventaire a été trouvée sur Internet, voulez-vous l\'importer ?</string>
+    <string name="dialog_auth2">NB: Si vous acceptez, l\'application devra redémarrer.</string>
+    <string name="importNOK">Importation des données échouée, veuillez réessayer plus tard.</string>
+    <string name="no">Non</string>
+    <string name="yes">Oui</string>
+    <string name="importOK">Données importées correctement !</string>
+    <string name="loggedin">Connecté en tant que : %1$s</string>
 
 </resources>

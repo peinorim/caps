@@ -48,4 +48,13 @@
     <string name="deleteInfo">¿Seguro eliminar esta cápsula?\n Esta acción es irreversible.</string>
     <string name="deleteTitle">Eliminar cápsulas de %1$s</string>
     <string name="share_tw">Compartir en Twitter</string>
+    <string name="authFailed">Error de autenticación …</string>
+    <string name="dialogAuthTitle">Se encontró una copia de seguridad en línea!</string>
+    <string name="dialog_auth">Se ha encontrado una copia de seguridad de su inventario en línea, ¿le gustaría importar estos datos?</string>
+    <string name="dialog_auth2">Nota: si dices que sí, la aplicación se reiniciará.</string>
+    <string name="importNOK">Error en la importación de datos. Inténtalo más tarde.</string>
+    <string name="importOK">¡Datos importados correctamente!</string>
+    <string name="loggedin">Conectado como :  %1$s</string>
+    <string name="no">No</string>
+    <string name="yes">Sí</string>
 </resources>

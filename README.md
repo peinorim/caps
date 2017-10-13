@@ -1,8 +1,5 @@
 My Coffee Capsules
 =============
 
-* v1.4 : remove custom capsules
-* v1.3 : Export data to csv
-* v1.2 : Add custom capsules
-* v1.1 : Stock previsions + en, pt locales
+* v1.1 : Google sign in & Firebase database to backup data
 * v1.0 : Initialization

@@ -1,8 +1,10 @@
 package com.merilonstudio.mycoffeecapsulesinventory.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.merilonstudio.mycoffeecapsulesinventory.R;
 import com.merilonstudio.mycoffeecapsulesinventory.db.CapsuleHelper;
 import com.merilonstudio.mycoffeecapsulesinventory.models.Capsule;
+import com.merilonstudio.mycoffeecapsulesinventory.models.DBSave;
+import com.merilonstudio.mycoffeecapsulesinventory.models.Global;
 
 
 public class AddActivity extends AppCompatActivity {
@@ -103,6 +108,11 @@ public class AddActivity extends AppCompatActivity {
                     capsule.setNotif(0);
                     CapsuleHelper capsuleHelper = new CapsuleHelper(getApplicationContext());
                     capsuleHelper.insertCustomCapsule(capsule);
+
+                    if (Global.mAuth != null) {
+                        saveToFirebase();
+                    }
+
                 } else {
                     tvName.getBackground().mutate().setColorFilter(getResources().getColor(R.color.red_darken3), PorterDuff.Mode.SRC_ATOP);
                     tvName.setHint(this.getResources().getString(R.string.nameEmpty));
@@ -117,6 +127,28 @@ public class AddActivity extends AppCompatActivity {
         finish();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveToFirebase() {
+        FirebaseUser user = Global.mAuth.getCurrentUser();
+        CapsuleHelper capsuleHelper = new CapsuleHelper(this);
+
+        if (user != null && !user.getUid().isEmpty() && capsuleHelper.exportDbToJson() && !Global.backupVal.isEmpty()) {
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = settings.edit();
+            final String settingVersion = getResources().getString(R.string.versionDBFirebase);
+            int versionDBSaved = settings.getInt(settingVersion, 1) + 1;
+
+            editor.putInt(settingVersion, versionDBSaved);
+            editor.apply();
+
+            DBSave dbSave = new DBSave();
+            dbSave.setContent(Global.backupVal);
+            dbSave.setVersion(versionDBSaved);
+
+            Global.mDatabase.child("caps").child(user.getUid()).setValue(dbSave);
+        }
     }
 
     @Override

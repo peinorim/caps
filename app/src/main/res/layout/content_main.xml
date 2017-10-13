@@ -14,7 +14,15 @@
     tools:showIn="@layout/app_bar_main">
 
     <include layout="@layout/first_list" />
+
     <include layout="@layout/content_search" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
 
 
 </RelativeLayout>

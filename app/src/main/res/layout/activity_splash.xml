@@ -21,6 +21,7 @@
             android:src="@drawable/volluto"/>
 
         <TextView
+            android:id="@+id/appName"
             android:layout_below="@+id/aboutimg"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -30,6 +31,15 @@
             android:textStyle="bold"
             android:gravity="center_horizontal"
             android:text="@string/app_name" />
+
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/appName"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:theme="@style/ProgressWhite"/>
 
         <TextView
             android:layout_width="fill_parent"
